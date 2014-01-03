@@ -46,8 +46,7 @@ case "$1" in
             object="${object}<username></username>"
             object="${object}<password></password>"
             object="${object}<coversize></coversize>"
-            object="${object}<development></development>"
-            object="${object}<showtab></showtab>"
+            object="${object}<showtab>0</showtab>"
 
             omv_config_add_element "/config/services" "calibre" "${object}" true
         fi

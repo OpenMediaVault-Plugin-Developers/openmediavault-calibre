@@ -152,12 +152,6 @@ Ext.define("OMV.module.admin.service.calibre.Settings", {
                 }]
             },{
                 xtype      : "checkbox",
-                name       : "development",
-                fieldLabel : _("Development"),
-                boxLabel   : _("Enables development mode"),
-                checked    : false
-            },{
-                xtype      : "checkbox",
                 name       : "showtab",
                 fieldLabel : _("Show Tab"),
                 boxLabel   : _("Show tab containing web interface frame."),

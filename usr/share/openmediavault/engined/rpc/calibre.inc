@@ -56,7 +56,6 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract {
         // Modify result data
         $object['enable']      = boolval($object['enable']);
         $object['port']        = intval($object['port']);
-        $object['development'] = boolval($object['development']);
         $object['showtab']     = boolval($object['showtab']);
 
         return $object;
@@ -82,7 +81,6 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract {
                 "username"       : { "type" : "string", "optional" : true },
                 "password"       : { "type" : "string", "optional" : true },
                 "coversize"      : { "type" : "string", "optional" : true },
-                "development"    : { "type" : "boolean" },
                 "showtab"        : { "type" : "boolean" }
             }
         }');
@@ -103,7 +101,6 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract {
             "username"       => $params['username'],
             "password"       => $params['password'],
             "coversize"      => $params['coversize'],
-            "development"    => array_boolval($params, 'development'),
             "showtab"        => array_boolval($params, 'showtab')
         );
 

@@ -27,7 +27,6 @@ port=$(omv_config_get "//services/calibre/port")
 username=$(omv_config_get "//services/calibre/username")
 password=$(omv_config_get "//services/calibre/password")
 maxcover=$(omv_config_get "//services/calibre/maxcover")
-development=$(omv_config_get "//services/calibre/development")
 
 # Create calibre config file
 cat <<EOF > ${CALIBRE_CONFIG}
@@ -41,7 +40,6 @@ PORT=${port}
 USERNAME=${username}
 PASSWORD=${password}
 MAX_COVER=${maxcover}
-DEVELOPMENT=${development}
 EXTRA_OPTS=""
 EOF
 

@@ -15,7 +15,7 @@
 ### END INIT INFO
 
 # main variables
-DAEMON=/opt/calibre/bin/calibre-server
+DAEMON=/opt/calibre/calibre-server
 SETTINGS=/etc/calibre-server.conf
 
 SETTINGS_LOADED=FALSE
@@ -59,7 +59,6 @@ load_settings() {
         [ -n "$EXTRA_OPTS" ] && DAEMON_OPTS="DAEMON_OPTS $EXTRA_OPTS"
         [ -n "$PID_FILE" ] || PID_FILE=/var/run/calibre/calibre-server.pid
         DAEMON_OPTS="$DAEMON_OPTS --pidfile=$PID_FILE"
-        [ $ENABLE_DEVELOPMENT = 1 ] && DAEMON_OPTS="$DAEMON_OPTS --develop"
         SETTINGS_LOADED=TRUE
     fi
     return 0
