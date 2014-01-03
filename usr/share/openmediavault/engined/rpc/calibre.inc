@@ -75,15 +75,16 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract {
         $this->validateMethodParams($params, '{
             "type"       : "object",
             "properties" : {
-                "enable"      : { "type" : "boolean" },
-                "mntentref"   : { ' . $GLOBALS['OMV_JSONSCHEMA_UUID_NONE'] . ' },
-                "port"        : { "type" : "integer", "minimum" : 1 },
-                "username"    : { "type" : "string", "optional" : true },
-                "password"    : { "type" : "string", "optional" : true },
-                "coversize"   : { "type" : "string", "optional" : true },
-                "extraopts"   : { "type" : "string", "optional" : true },
-                "development" : { "type" : "boolean" },
-                "showtab"     : { "type" : "boolean" }
+                "enable"         : { "type" : "boolean" },
+                "mntentref"      : { ' . $GLOBALS['OMV_JSONSCHEMA_UUID_NONE'] . ' },
+                "library-folder" : { "type" : "string", "optional" : true },
+                "port"           : { "type" : "integer", "minimum" : 1 },
+                "username"       : { "type" : "string", "optional" : true },
+                "password"       : { "type" : "string", "optional" : true },
+                "coversize"      : { "type" : "string", "optional" : true },
+                "extraopts"      : { "type" : "string", "optional" : true },
+                "development"    : { "type" : "boolean" },
+                "showtab"        : { "type" : "boolean" }
             }
         }');
 
@@ -92,7 +93,7 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract {
         $deviceDir = $deviceDir['dir'];
 
         $dataFolder = "{$deviceDir}/calibre-data";
-        $params['data-folder'] = $dataFolder;
+        $params['library-folder'] = $dataFolder;
 
         // Prepare configuration data
         $object = array(
