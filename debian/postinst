@@ -58,9 +58,6 @@ case "$1" in
             rm -rf /var/run/calibre
         fi
 
-        echo "Create config file..."
-        /usr/share/openmediavault/mkconf/calibre
-
         echo "Installing Calibre..."
         if [ ! -d "${INSTALL_DIR}" ]; then
             mkdir -p ${INSTALL_DIR}
@@ -80,6 +77,10 @@ case "$1" in
             wget ${LINK32} -O ${FILE32}
             tar -xjof ${FILE32} -C ${INSTALL_DIR}
         fi
+
+        echo "Create config file..."
+        /usr/share/openmediavault/mkconf/calibre
+
         ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

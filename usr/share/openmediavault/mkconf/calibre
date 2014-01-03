@@ -46,6 +46,10 @@ DEVELOPMENT=${development}
 EXTRA_OPTS="${extraopts}"
 EOF
 
+if [ "$(omv_config_get "//services/calibre/enable")" != "1" ]; then
+    exit 0
+fi
+
 # move data folder
 CALIBRE_HOME="$(getent passwd calibre | cut -d: -f6)"
 DATA_FOLDER="$(omv_config_get "//services/calibre/data-folder")"
