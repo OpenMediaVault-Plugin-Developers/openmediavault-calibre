@@ -82,7 +82,7 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract {
                 "username"       : { "type" : "string", "optional" : true },
                 "password"       : { "type" : "string", "optional" : true },
                 "coversize"      : { "type" : "string", "optional" : true },
-                "extraopts"      : { "type" : "string", "optional" : true },
+                "extraoptions    : { "type" : "string", "optional" : true },
                 "development"    : { "type" : "boolean" },
                 "showtab"        : { "type" : "boolean" }
             }
@@ -104,7 +104,7 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract {
             "username"       => $params['username'],
             "password"       => $params['password'],
             "coversize"      => $params['coversize'],
-            "extraopts"      => (!empty($params['extraopts']) ? $params['extraopts'] : ''),
+            "extraoptions"   => (!empty($params['extraoptions']) ? $params['extraoptions'] : ''),
             "development"    => array_boolval($params, 'development'),
             "showtab"        => array_boolval($params, 'showtab')
         );

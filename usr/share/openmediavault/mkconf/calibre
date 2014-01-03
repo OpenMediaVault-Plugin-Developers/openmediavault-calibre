@@ -28,7 +28,7 @@ username=$(omv_config_get "//services/calibre/username")
 password=$(omv_config_get "//services/calibre/password")
 maxcover=$(omv_config_get "//services/calibre/maxcover")
 development=$(omv_config_get "//services/calibre/development")
-extraopts=$(omv_config_get "//services/calibre/extraopts")
+extraoptions=$(omv_config_get "//services/calibre/extraoptions")
 
 # Create calibre config file
 cat <<EOF > ${CALIBRE_CONFIG}
@@ -43,7 +43,7 @@ USERNAME=${username}
 PASSWORD=${password}
 MAX_COVER=${maxcover}
 DEVELOPMENT=${development}
-EXTRA_OPTS="${extraopts}"
+EXTRA_OPTS="${extraoptions}"
 EOF
 
 if [ "$(omv_config_get "//services/calibre/enable")" != "1" ]; then
@@ -51,21 +51,20 @@ if [ "$(omv_config_get "//services/calibre/enable")" != "1" ]; then
 fi
 
 # move data folder
-CALIBRE_HOME="$(getent passwd calibre | cut -d: -f6)"
-DATA_FOLDER="$(omv_config_get "//services/calibre/data-folder")"
+calibre_home="$(getent passwd calibre | cut -d: -f6)"
 
-if [ "${CALIBRE_HOME}" != "${DATA_FOLDER}" ]; then
+if [ "${calibre_home}" != "${libraryfolder}" ]; then
     /etc/init.d/calibre stop
 
-    if [ ! -d "${DATA_FOLDER}" ]; then
-        mkdir -p "${DATA_FOLDER}"
+    if [ ! -d "${libraryfolder}" ]; then
+        mkdir -p "${libraryfolder}"
     fi
 
-    chown calibre:users "${DATA_FOLDER}"
+    chown calibre:users "${libraryfolder}"
 
-    cp -rfp ${calibre_HOME}/* ${DATA_FOLDER}/
-    rm -rf ${calibre_HOME}
+    cp -rfp ${calibre_home}/* ${libraryfolder}/
+    rm -rf ${calibre_home}
 
-    /usr/sbin/usermod -d "${DATA_FOLDER}" calibre
+    /usr/sbin/usermod -d "${libraryfolder}" calibre
     /etc/init.d/calibre start
 fi
