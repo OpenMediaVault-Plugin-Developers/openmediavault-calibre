@@ -42,7 +42,7 @@ case "$1" in
             object="<enable>0</enable>"
             object="${object}<mntentref></mntentref>"
             object="${object}<library-folder>${CALIBRE_HOME}</library-folder>"
-            object="${object}<port></port>"
+            object="${object}<port>8080</port>"
             object="${object}<username></username>"
             object="${object}<password></password>"
             object="${object}<coversize></coversize>"
@@ -69,13 +69,19 @@ case "$1" in
                 rm -f ${FILE64}
             fi
             wget ${LINK64} -O ${FILE64}
+
+            echo "Extracting..."
             tar -xjof ${FILE64} -C ${INSTALL_DIR}
+            rm -f ${FILE64}
         else
             if [ -f "${FILE32}" ]; then
                 rm -f ${FILE32}
             fi
             wget ${LINK32} -O ${FILE32}
+
+            echo "Extracting..."
             tar -xjof ${FILE32} -C ${INSTALL_DIR}
+            rm -f ${FILE32}
         fi
 
         echo "Create config file..."
