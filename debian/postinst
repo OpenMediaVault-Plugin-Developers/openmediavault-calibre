@@ -5,6 +5,24 @@ set -e
 . /etc/default/openmediavault
 . /usr/share/openmediavault/scripts/helper-functions
 
+LINK32="http://status.calibre-ebook.com/dist/linux32"
+LINK64="http://status.calibre-ebook.com/dist/linux64"
+FILE32="/home/calibre/calibre32.tar.bz2"
+FILE64="/home/calibre/calibre64.tar.bz2"
+INSTALL_DIR="/opt/calibre"
+
+AMD64=false
+ARCH="`/bin/uname -m`"
+
+case "$ARCH" in
+    *x86_64*)
+        AMD64=true
+        ;;
+    *)
+        AMD64=false
+        ;;
+esac
+
 case "$1" in
 
     configure)
@@ -40,9 +58,28 @@ case "$1" in
             rm -rf /var/run/calibre
         fi
 
-        echo "Installing Calibre..."
+        echo "Create config file..."
         /usr/share/openmediavault/mkconf/calibre
-        python -c "import sys; py3 = sys.version_info[0] > 2; u = __import__('urllib.request' if py3 else 'urllib', fromlist=1); exec(u.urlopen('http://status.calibre-ebook.com/linux_installer').read()); main(install_dir='/opt')"
+
+        echo "Installing Calibre..."
+        if [ ! -d "${INSTALL_DIR}" ]; then
+            mkdir -p ${INSTALL_DIR}
+            chown calibre:users ${INSTALL_DIR}
+        fi
+
+        if $AMD64; then
+            if [ -f "${FILE64}" ]; then
+                rm -f ${FILE64}
+            fi
+            wget ${LINK64} -O ${FILE64}
+            tar -xjof ${FILE64} -C ${INSTALL_DIR}
+        else
+            if [ -f "${FILE32}" ]; then
+                rm -f ${FILE32}
+            fi        
+            wget ${LINK32} -O ${FILE32}
+            tar -xjof ${FILE32} -C ${INSTALL_DIR}
+        fi
 
         ;;
 
