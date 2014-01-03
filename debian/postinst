@@ -46,7 +46,6 @@ case "$1" in
             object="${object}<username></username>"
             object="${object}<password></password>"
             object="${object}<coversize></coversize>"
-            object="${object}<extraoptions></extraoptions>"
             object="${object}<development></development>"
             object="${object}<showtab></showtab>"
 

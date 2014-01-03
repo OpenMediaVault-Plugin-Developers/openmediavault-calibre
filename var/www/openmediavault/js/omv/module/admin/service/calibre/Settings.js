@@ -162,11 +162,6 @@ Ext.define("OMV.module.admin.service.calibre.Settings", {
                 fieldLabel : _("Show Tab"),
                 boxLabel   : _("Show tab containing web interface frame."),
                 checked    : false
-            },{
-                xtype      : "textarea",
-                name       : "extraoptions",
-                fieldLabel : _("Extra options"),
-                allowBlank : true
             }]
         }];
     }
