@@ -1,0 +1,67 @@
+#!/bin/sh
+#
+# Copyright (C) 2014 OpenMediaVault Plugin Developers
+#
+# This file is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# any later version.
+#
+# This file is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this file. If not, see <http://www.gnu.org/licenses/>.
+
+set -e
+
+. /etc/default/openmediavault
+. /usr/share/openmediavault/scripts/helper-functions
+
+CALIBRE_CONFIG="/etc/calibre-server.conf";
+
+libraryfolder=$(omv_config_get "//services/calibre/library-folder")
+port=$(omv_config_get "//services/calibre/port")
+username=$(omv_config_get "//services/calibre/username")
+password=$(omv_config_get "//services/calibre/password")
+maxcover=$(omv_config_get "//services/calibre/maxcover")
+development=$(omv_config_get "//services/calibre/development")
+extraopts=$(omv_config_get "//services/calibre/extraopts")
+
+# Create calibre config file
+cat <<EOF > ${CALIBRE_CONFIG}
+APP_PATH=/opt/calibre
+ENABLE_DAEMON=1
+RUN_AS=calibre
+PID_FILE=/var/run/calibre/calibre-server.pid
+
+LIBRARY=${libraryfolder}
+PORT=${port}
+USERNAME=${username}
+PASSWORD=${password}
+MAX_COVER=${maxcover}
+DEVELOPMENT=${development}
+EXTRA_OPTS="${extraopts}"
+EOF
+
+# move data folder
+CALIBRE_HOME="$(getent passwd calibre | cut -d: -f6)"
+DATA_FOLDER="$(omv_config_get "//services/calibre/data-folder")"
+
+if [ "${CALIBRE_HOME}" != "${DATA_FOLDER}" ]; then
+    /etc/init.d/calibre stop
+
+    if [ ! -d "${DATA_FOLDER}" ]; then
+        mkdir -p "${DATA_FOLDER}"
+    fi
+
+    chown calibre:users "${DATA_FOLDER}"
+
+    cp -rfp ${calibre_HOME}/* ${DATA_FOLDER}/
+    rm -rf ${calibre_HOME}
+
+    /usr/sbin/usermod -d "${DATA_FOLDER}" calibre
+    /etc/init.d/calibre start
+fi

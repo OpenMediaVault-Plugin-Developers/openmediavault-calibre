@@ -1,0 +1,25 @@
+Source: openmediavault-calibre
+Section: net
+Priority: optional
+Maintainer: OpenMediaVault Plugin Developers <plugins@omv-extras.org>
+Build-Depends: debhelper (>= 8.0.0)
+Standards-Version: 3.9.3
+
+Package: openmediavault-calibre
+Architecture: all
+Depends: openmediavault (>= 0.5.14), python, bzip2, xdg-utils,
+ imagemagick, python-imaging, python-mechanize, python-lxml,
+ python-dateutil, python-cssutils, python-beautifulsoup,
+ python-dnspython, python-poppler, libpodofo-utils, libwmf-bin,
+ python-chm ${misc:Depends}
+Description: Calibre plugin for OpenMediaVault.
+ Calibre is a free and open source e-book library management
+ application developed by users of e-books for users of e-books.
+ It has a cornucopia of features divided into the following main
+ categories:
+ .
+ * Library Management
+ * E-book conversion
+ * Syncing to e-book reader devices
+ * Downloading news from the web and converting it into e-book form
+ * Content server for online access to your book collection
