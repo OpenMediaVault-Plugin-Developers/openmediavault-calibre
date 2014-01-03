@@ -76,11 +76,10 @@ case "$1" in
         else
             if [ -f "${FILE32}" ]; then
                 rm -f ${FILE32}
-            fi        
+            fi
             wget ${LINK32} -O ${FILE32}
             tar -xjof ${FILE32} -C ${INSTALL_DIR}
         fi
-
         ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
