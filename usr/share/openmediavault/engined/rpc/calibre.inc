@@ -54,9 +54,9 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract {
             throw new OMVException( OMVErrorMsg::E_CONFIG_GET_OBJECT_FAILED, $this->getXpath() );
 
         // Modify result data
-        $object['enable']      = boolval($object['enable']);
-        $object['port']        = intval($object['port']);
-        $object['showtab']     = boolval($object['showtab']);
+        $object['enable']  = boolval($object['enable']);
+        $object['port']    = intval($object['port']);
+        $object['showtab'] = boolval($object['showtab']);
 
         return $object;
     }

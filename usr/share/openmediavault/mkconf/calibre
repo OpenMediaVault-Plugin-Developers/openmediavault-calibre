@@ -59,9 +59,10 @@ if [ "${calibre_home}" != "${libraryfolder}" ]; then
 
     chown calibre:users "${libraryfolder}"
 
+    touch ${calibre_home}/temp
+
     cp -rfp ${calibre_home}/* ${libraryfolder}/
     rm -rf ${calibre_home}
 
-    /usr/sbin/usermod -d "${libraryfolder}" calibre
     /etc/init.d/calibre start
 fi

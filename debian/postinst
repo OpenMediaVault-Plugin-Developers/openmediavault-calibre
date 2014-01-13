@@ -82,6 +82,12 @@ case "$1" in
             rm -f ${FILE32}
         fi
 
+        insserv calibre
+
+        if [ "$(omv_config_get "//services/calibre/enable")" != "1" ]; then
+            update-rc.d calibre disable
+        fi
+
         echo "Create config file..."
         /usr/share/openmediavault/mkconf/calibre
 
