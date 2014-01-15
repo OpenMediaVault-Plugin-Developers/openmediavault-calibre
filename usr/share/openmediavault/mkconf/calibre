@@ -30,11 +30,6 @@ maxcover=$(omv_config_get "//services/calibre/maxcover")
 
 # Create calibre config file
 cat <<EOF > ${CALIBRE_CONFIG}
-APP_PATH=/opt/calibre
-ENABLE_DAEMON=1
-RUN_AS=calibre
-PID_FILE=/var/run/calibre/calibre-server.pid
-
 LIBRARY=${libraryfolder}
 PORT=${port}
 USERNAME=${username}
@@ -52,6 +47,8 @@ calibre_home="$(getent passwd calibre | cut -d: -f6)"
 
 if [ "${calibre_home}" != "${libraryfolder}" ]; then
     /etc/init.d/calibre stop
+
+    sudo pkill -KILL -u calibre
 
     if [ ! -d "${libraryfolder}" ]; then
         mkdir -p "${libraryfolder}"

@@ -15,25 +15,21 @@
 ### END INIT INFO
 
 # main variables
+RUN_AS=calibre
+RUN_GRP=users
+APP_PATH=/opt/calibre
 DAEMON=/opt/calibre/calibre-server
+ENABLE_DAEMON=1
+PID_FILE=/var/run/calibre/calibre.pid
+PID_PATH=$(dirname $PID_FILE)
+NAME=Calibre
+DESC=Calibre
 SETTINGS=/etc/calibre-server.conf
 
 SETTINGS_LOADED=FALSE
 
-NAME=Calibre
-
-# only accept values from /etc/calibre-server.conf
-unset RUN_AS LIBRARY PORT PID_FILE
-
+# Get lsb functions
 . /lib/lsb/init-functions
-
-[ -x $DAEMON ] || {
-    log_warning_msg "$NAME: Can't execute daemon, aborting. See $DAEMON";
-    return 1; }
-
-[ -r $SETTINGS ] || {
-    log_warning_msg "$NAME: Can't read settings, aborting. See $SETTINGS";
-    return 1; }
 
 load_settings() {
     if [ $SETTINGS_LOADED != "TRUE" ]; then
@@ -46,7 +42,6 @@ load_settings() {
         [ -n "$PASSWORD" ] && DAEMON_OPTS="$DAEMON_OPTS --password=$PASSWORD"
         [ -n "$COVERSIZE" ] && DAEMON_OPTS="$DAEMON_OPTS --max-cover=$MAX_COVER"
         [ -n "$EXTRA_OPTS" ] && DAEMON_OPTS="DAEMON_OPTS $EXTRA_OPTS"
-        [ -n "$PID_FILE" ] || PID_FILE=/var/run/calibre/calibre-server.pid
         DAEMON_OPTS="$DAEMON_OPTS --pidfile=$PID_FILE"
         SETTINGS_LOADED=TRUE
     fi
@@ -55,11 +50,17 @@ load_settings() {
 
 load_settings || exit 0
 
+# Create PID directory if not exist and ensure the calibre user can write to it
+if [ ! -d $PID_PATH ]; then
+    mkdir -p $PID_PATH
+    chown $RUN_AS $PID_PATH
+fi
+
 if [ -e $PID_FILE ]; then
     PID=`cat $PID_FILE`
     if ! kill -0 $PID > /dev/null 2>&1; then
         echo "Removing stale $PID_FILE"
-        remove_pid
+        rm -f $PID_FILE
     fi
 fi
 
@@ -70,37 +71,20 @@ is_running () {
     return 0
 }
 
-handle_pid () {
-    PID_PATH=`dirname $PID_FILE`
-    [ -d $PID_PATH ] || mkdir -p $PID_PATH && chown -R $RUN_AS $PID_PATH > /dev/null || {
-        log_warning_msg "$NAME: Could not create $PID_FILE, aborting.";
-        return 1;}
-}
-
-remove_pid () {
-    if [ -e $PID_FILE ]; then
-        rm -f $PID_FILE
-    fi
-}
 start_calibre () {
     if ! is_running; then
-        echo "Starting $NAME"
-        handle_pid
-        remove_pid
-        start-stop-daemon -o -c $RUN_AS --start --pidfile $PID_FILE --exec $DAEMON -- $DAEMON_OPTS
+        echo "Starting $DESC"
+        sudo -u $RUN_AS $DAEMON $DAEMON_OPTS &> /dev/null
     else
-        echo "$NAME: already running (pid $PID)"
+        echo "$DESC is running"
     fi
 }
 
 stop_calibre () {
     if is_running; then
-        echo "Stopping $NAME"
+        echo "Stopping $DESC"
         start-stop-daemon --stop --pidfile $PID_FILE --retry 15
-    else
-        echo "$NAME: not running"
     fi
-    remove_pid
 }
 
 case "$1" in
@@ -115,12 +99,10 @@ case "$1" in
         start_calibre
         ;;
     status)
-        status_of_proc -p "$PID_FILE" "$DAEMON" "$NAME" && exit 0 || exit $?
+        status_of_proc -p "$PID_FILE" "$DAEMON" "$NAME"
         ;;
     *)
-        N=/etc/init.d/$NAME
-        echo "Usage: $N {start|stop|restart|force-reload}" >&2
-        exit 1
+        echo "Usage: $0 {start|stop|restart|force-reload}" >&2
         ;;
 esac
 
