@@ -48,8 +48,6 @@ calibre_home="$(getent passwd calibre | cut -d: -f6)"
 if [ "${calibre_home}" != "${libraryfolder}" ]; then
     /etc/init.d/calibre stop
 
-    sudo pkill -KILL -u calibre
-
     if [ ! -d "${libraryfolder}" ]; then
         mkdir -p "${libraryfolder}"
     fi
