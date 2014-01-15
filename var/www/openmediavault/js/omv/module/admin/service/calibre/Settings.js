@@ -145,7 +145,7 @@ Ext.define("OMV.module.admin.service.calibre.Settings", {
             },{
                 xtype      : "textfield",
                 name       : "coversize",
-                fieldLabel : _("coversize"),
+                fieldLabel : _("Cover Size"),
                 allowBlank : true,
                 plugins    : [{
                     ptype : "fieldinfo",

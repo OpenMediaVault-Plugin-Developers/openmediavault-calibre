@@ -1,3 +1,11 @@
+openmediavault-calibre (0.5.2) stable; urgency=low
+
+  * Fix label
+  * Update locale
+  * Remove blank line from book list
+
+ -- OpenMediaVault Plugin Developers <plugins@omv-extras.org>  Wed, 15 Jan 2014 14:55:27 -0500
+
 openmediavault-calibre (0.5.1) stable; urgency=low
 
   * Add book list
