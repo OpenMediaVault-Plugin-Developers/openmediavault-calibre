@@ -38,6 +38,8 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract {
         $this->registerMethod('getSettings');
         $this->registerMethod('setSettings');
         $this->registerMethod('doImport');
+        $this->registerMethod('getBookList');
+        $this->registerMethod('deleteBook');
     }
 
     /**
@@ -137,6 +139,70 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract {
                 throw new OMVException(OMVErrorMsg::E_EXEC_FAILED, $cmd, implode("\n", $output));
         }
     }
+
+    public function getBookList($params, $context) {
+        global $xmlConfig;
+
+        // Validate the RPC caller context.
+        $this->validateMethodContext($context, array( "role" => OMV_ROLE_ADMINISTRATOR ));
+
+        $xpath = "//services/calibre";
+        $object = $xmlConfig->get($xpath);
+        if(is_null($object))
+            throw new OMVException(OMVErrorMsg::E_CONFIG_GET_OBJECT_FAILED, $xpath);
+
+        $cmd = "/opt/calibre/calibredb list --library-path \"" . $object['library-folder'] . "\" 2>&1";
+        OMVUtil::exec($cmd, $output, $result);
+
+        if ($result !== 0)
+            throw new OMVException(OMVErrorMsg::E_EXEC_FAILED, $cmd, implode("\n", $output));
+
+        // Get column names
+        $cols = array_map(function($a)
+        {
+            return preg_replace("/[^A-Z]+/", '', $a);
+        }, preg_split('/\s+/', trim(array_shift($output))));
+
+        $split_limit = count($cols);
+
+        $objects = array();
+        foreach ($output as $line) {
+            if (trim($line) == '')
+                continue;
+
+            $objects[] = array_combine($cols, preg_split('/\s+/', trim($line), $split_limit));
+        }
+
+        return array(
+            "total" => count($objects),
+            "data"  => $objects
+        );
+    }
+
+    public function deleteBook($params, $context) {
+        global $xmlConfig;
+
+        // Validate the RPC caller context.
+        $this->validateMethodContext($context, array( "role" => OMV_ROLE_ADMINISTRATOR ));
+
+        // Validate the parameters of the RPC service method.
+        $this->validateMethodParams($params, '{
+            "type"       : "object",
+            "properties" : {
+                "id" : { "type" : "integer", "minimum" : 1 },
+            }
+        }');
+
+        $xpath = "//services/calibre";
+        $object = $xmlConfig->get($xpath);
+        if(is_null($object))
+            throw new OMVException(OMVErrorMsg::E_CONFIG_GET_OBJECT_FAILED, $xpath);
+
+        $cmd = "/opt/calibre/calibredb remove --library-path \"" . $object['library-folder'] . "\" " . $params['id'] . " 2>&1";
+        if(0 !== $this->exec($cmd, $output))
+            throw new OMVException(OMVErrorMsg::E_EXEC_FAILED, $cmd, implode("\n", $output));
+    }
+
 }
 
 // Register the RPC service.
