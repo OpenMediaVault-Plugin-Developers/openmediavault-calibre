@@ -37,6 +37,7 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract {
     public function initialize() {
         $this->registerMethod('getSettings');
         $this->registerMethod('setSettings');
+        $this->registerMethod('doImport');
     }
 
     /**
@@ -131,7 +132,7 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract {
         if( strlen($object['sharedfolderref']) > 30 ) {
             $sfPath = OMVRpc::exec("ShareMgmt", "getPath", array("uuid" => $object['sharedfolderref']), $context);
 
-            $cmd = "/opt/calibre/calibredb add $sfPath 2>&1";
+            $cmd = "/opt/calibre/calibredb add --library-path \"" . $object['library-folder'] . "\" $sfPath 2>&1";
             if(0 !== $this->exec($cmd, $output))
                 throw new OMVException(OMVErrorMsg::E_EXEC_FAILED, $cmd, implode("\n", $output));
         }

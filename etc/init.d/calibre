@@ -55,6 +55,14 @@ load_settings() {
 
 load_settings || exit 0
 
+if [ -e $PID_FILE ]; then
+    PID=`cat $PID_FILE`
+    if ! kill -0 $PID > /dev/null 2>&1; then
+        echo "Removing stale $PID_FILE"
+        remove_pid
+    fi
+fi
+
 is_running () {
     if [ ! -e $PID_FILE ]; then
         return 1
@@ -69,10 +77,16 @@ handle_pid () {
         return 1;}
 }
 
+remove_pid () {
+    if [ -e $PID_FILE ]; then
+        rm -f $PID_FILE
+    fi
+}
 start_calibre () {
     if ! is_running; then
         echo "Starting $NAME"
         handle_pid
+        remove_pid
         start-stop-daemon -o -c $RUN_AS --start --pidfile $PID_FILE --exec $DAEMON -- $DAEMON_OPTS
     else
         echo "$NAME: already running (pid $PID)"
@@ -86,6 +100,7 @@ stop_calibre () {
     else
         echo "$NAME: not running"
     fi
+    remove_pid
 }
 
 case "$1" in
