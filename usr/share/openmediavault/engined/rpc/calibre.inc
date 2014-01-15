@@ -186,7 +186,7 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract {
         $this->validateMethodParams($params, '{
             "type"       : "object",
             "properties" : {
-                "id" : { "type" : "integer", "minimum" : 1 },
+                "id" : { "type" : "integer", "minimum" : 1 }
             }
         }');
 
