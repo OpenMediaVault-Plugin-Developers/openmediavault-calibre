@@ -7,8 +7,8 @@ set -e
 
 LINK32="http://status.calibre-ebook.com/dist/linux32"
 LINK64="http://status.calibre-ebook.com/dist/linux64"
-FILE32="/home/calibre/calibre32.tar.bz2"
-FILE64="/home/calibre/calibre64.tar.bz2"
+FILE32="/tmp/calibre32.tar.bz2"
+FILE64="/tmp/calibre64.tar.bz2"
 INSTALL_DIR="/opt/calibre"
 
 AMD64=false
