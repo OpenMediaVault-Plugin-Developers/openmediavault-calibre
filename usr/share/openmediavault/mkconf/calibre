@@ -59,10 +59,12 @@ if [ "${calibre_home}" != "${libraryfolder}" ]; then
 
     chown calibre:users "${libraryfolder}"
 
-    touch ${calibre_home}/temp
+    if [ ! -d "${calibre_home}" ]; then
+        touch ${calibre_home}/temp
 
-    cp -rfp ${calibre_home}/* ${libraryfolder}/
-    rm -rf ${calibre_home}
+        cp -rfp ${calibre_home}/* ${libraryfolder}/
+        rm -rf ${calibre_home}
+    fi
     
     /usr/sbin/usermod -d "${libraryfolder}" calibre
     
