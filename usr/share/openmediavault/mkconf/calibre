@@ -59,7 +59,7 @@ if [ "${calibre_home}" != "${libraryfolder}" ]; then
 
     chown calibre:users "${libraryfolder}"
 
-    if [ ! -d "${calibre_home}" ]; then
+    if [ -d "${calibre_home}" ]; then
         touch ${calibre_home}/temp
 
         cp -rfp ${calibre_home}/* ${libraryfolder}/
