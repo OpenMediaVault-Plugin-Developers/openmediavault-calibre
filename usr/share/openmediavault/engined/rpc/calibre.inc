@@ -164,7 +164,7 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract {
 
         $objects = array();
         foreach ($output as $line) {
-            if (strlen(trim($line)) < 3)
+            if (intval(trim($line)) < 1)
                 continue;
 
             $objects[] = array_combine($cols, preg_split('/\t/', trim($line), $split_limit));
