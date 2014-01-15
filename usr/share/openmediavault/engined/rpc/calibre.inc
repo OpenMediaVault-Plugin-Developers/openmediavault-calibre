@@ -74,14 +74,15 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract {
         $this->validateMethodParams($params, '{
             "type"       : "object",
             "properties" : {
-                "enable"         : { "type" : "boolean" },
-                "mntentref"      : { ' . $GLOBALS['OMV_JSONSCHEMA_UUID_NONE'] . ' },
-                "library-folder" : { "type" : "string", "optional" : true },
-                "port"           : { "type" : "integer", "minimum" : 1 },
-                "username"       : { "type" : "string", "optional" : true },
-                "password"       : { "type" : "string", "optional" : true },
-                "coversize"      : { "type" : "string", "optional" : true },
-                "showtab"        : { "type" : "boolean" }
+                "enable"          : { "type" : "boolean" },
+                "mntentref"       : { ' . $GLOBALS['OMV_JSONSCHEMA_UUID_NONE'] . ' },
+                "library-folder"  : { "type" : "string", "optional" : true },
+                "port"            : { "type" : "integer", "minimum" : 1 },
+                "username"        : { "type" : "string", "optional" : true },
+                "password"        : { "type" : "string", "optional" : true },
+                "coversize"       : { "type" : "string", "optional" : true },
+                "showtab"         : { "type" : "boolean" },
+                "sharedfolderref" : { '.$GLOBALS['OMV_JSONSCHEMA_UUID_NONE'].', "optional" : true }
             }
         }');
 
@@ -94,14 +95,15 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract {
 
         // Prepare configuration data
         $object = array(
-            "enable"         => array_boolval($params, 'enable'),
-            "mntentref"      => $params['mntentref'],
-            "library-folder" => $params['library-folder'],
-            "port"           => intval($params['port']),
-            "username"       => $params['username'],
-            "password"       => $params['password'],
-            "coversize"      => $params['coversize'],
-            "showtab"        => array_boolval($params, 'showtab')
+            "enable"          => array_boolval($params, 'enable'),
+            "mntentref"       => $params['mntentref'],
+            "library-folder"  => $params['library-folder'],
+            "port"            => intval($params['port']),
+            "username"        => $params['username'],
+            "password"        => $params['password'],
+            "coversize"       => $params['coversize'],
+            "showtab"         => array_boolval($params, 'showtab'),
+            "sharedfolderref" => $params['sharedfolderref']
         );
 
         // Set configuration object
@@ -113,6 +115,26 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract {
         $dispatcher->notify(OMV_NOTIFY_MODIFY, "org.openmediavault.services.calibre", $object);
 
         return $object;
+    }
+
+    public function doImport($params, $context) {
+        global $xmlConfig;
+
+        // Validate the RPC caller context.
+        $this->validateMethodContext($context, array( "role" => OMV_ROLE_ADMINISTRATOR ));
+
+        $xpath = "//services/calibre";
+        $object = $xmlConfig->get($xpath);
+        if(is_null($object))
+            throw new OMVException(OMVErrorMsg::E_CONFIG_GET_OBJECT_FAILED, $xpath);
+
+        if( strlen($object['sharedfolderref']) > 30 ) {
+            $sfPath = OMVRpc::exec("ShareMgmt", "getPath", array("uuid" => $object['sharedfolderref']), $context);
+
+            $cmd = "/opt/calibre/calibredb add $sfPath 2>&1";
+            if(0 !== $this->exec($cmd, $output))
+                throw new OMVException(OMVErrorMsg::E_EXEC_FAILED, $cmd, implode("\n", $output));
+        }
     }
 }
 

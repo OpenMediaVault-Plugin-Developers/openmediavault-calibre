@@ -157,6 +157,45 @@ Ext.define("OMV.module.admin.service.calibre.Settings", {
                 boxLabel   : _("Show tab containing web interface frame."),
                 checked    : false
             }]
+        },{
+            xtype         : "fieldset",
+            title         : _("Book Import"),
+            fieldDefaults : {
+                labelSeparator : ""
+            },
+            items : [{
+                xtype      : "sharedfoldercombo",
+                name       : "sharedfolderref",
+                fieldLabel : _("Shared folder"),
+                allowNone  : true,
+                allowBlank : true,
+                plugins    : [{
+                    ptype : "fieldinfo",
+                    text  : _("The location of books to import.")
+                }]
+            },{
+                xtype   : "button",
+                name    : "import",
+                text    : _("Import"),
+                scope   : this,
+                handler : function() {
+                    // Execute RPC.
+                    OMV.Rpc.request({
+                        scope    : this,
+                        callback : function(id, success, response) {
+                            this.doReload();
+                        },
+                        relayErrors : false,
+                        rpcData     : {
+                            service  : "Calibre",
+                            method   : "doImport"
+                        }
+                    });
+                }
+            },{
+                border : false,
+                html   : "</p>"
+            }]
         }];
     }
 });

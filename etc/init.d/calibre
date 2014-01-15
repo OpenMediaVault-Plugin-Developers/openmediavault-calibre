@@ -21,7 +21,6 @@ SETTINGS=/etc/calibre-server.conf
 SETTINGS_LOADED=FALSE
 
 NAME=Calibre
-DESC='Calibre Server'
 
 # only accept values from /etc/calibre-server.conf
 unset RUN_AS LIBRARY PORT PID_FILE
@@ -29,22 +28,12 @@ unset RUN_AS LIBRARY PORT PID_FILE
 . /lib/lsb/init-functions
 
 [ -x $DAEMON ] || {
-    log_warning_msg "$DESC: Can't execute daemon, aborting. See $DAEMON";
+    log_warning_msg "$NAME: Can't execute daemon, aborting. See $DAEMON";
     return 1; }
 
 [ -r $SETTINGS ] || {
-    log_warning_msg "$DESC: Can't read settings, aborting. See $SETTINGS";
+    log_warning_msg "$NAME: Can't read settings, aborting. See $SETTINGS";
     return 1; }
-
-check_retval() {
-    if [ $? -eq 0 ]; then
-        log_end_msg 0
-        return 0
-    else
-        log_end_msg 1
-        exit 1
-    fi
-}
 
 load_settings() {
     if [ $SETTINGS_LOADED != "TRUE" ]; then
@@ -67,38 +56,35 @@ load_settings() {
 load_settings || exit 0
 
 is_running () {
-    # returns 1 when running, else 0.
-    PID=$(pgrep -f "$APP_PATH/bin/calibre-server $DAEMON_OPTS")
-    RET=$?
-    [ $RET -gt 1 ] && exit 1 || return $RET
+    if [ ! -e $PID_FILE ]; then
+        return 1
+    fi
+    return 0
 }
 
 handle_pid () {
     PID_PATH=`dirname $PID_FILE`
     [ -d $PID_PATH ] || mkdir -p $PID_PATH && chown -R $RUN_AS $PID_PATH > /dev/null || {
-        log_warning_msg "$DESC: Could not create $PID_FILE, aborting.";
+        log_warning_msg "$NAME: Could not create $PID_FILE, aborting.";
         return 1;}
 }
 
 start_calibre () {
     if ! is_running; then
-        log_daemon_msg "Starting $DESC"
-        [ "$WEB_UPDATE" = 1 ] && enable_updates
+        echo "Starting $NAME"
         handle_pid
         start-stop-daemon -o -c $RUN_AS --start --pidfile $PID_FILE --exec $DAEMON -- $DAEMON_OPTS
-        check_retval
     else
-        log_success_msg "$DESC: already running (pid $PID)"
+        echo "$NAME: already running (pid $PID)"
     fi
 }
 
 stop_calibre () {
     if is_running; then
-        log_daemon_msg "Stopping $DESC"
-        start-stop-daemon -o --stop --pidfile $PID_FILE --retry 15
-        check_retval
+        echo "Stopping $NAME"
+        start-stop-daemon --stop --pidfile $PID_FILE --retry 15
     else
-        log_success_msg "$DESC: not running"
+        echo "$NAME: not running"
     fi
 }
 
