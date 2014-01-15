@@ -192,10 +192,8 @@ Ext.define("OMV.module.admin.service.calibre.Settings", {
                             method   : "doImport"
                         }
                     });
-                }
-            },{
-                border : false,
-                html   : "</p>"
+                },
+                margin  : "0 0 5 0"
             }]
         }];
     }

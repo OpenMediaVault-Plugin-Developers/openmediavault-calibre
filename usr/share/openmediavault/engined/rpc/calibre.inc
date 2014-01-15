@@ -151,26 +151,23 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract {
         if(is_null($object))
             throw new OMVException(OMVErrorMsg::E_CONFIG_GET_OBJECT_FAILED, $xpath);
 
-        $cmd = "/opt/calibre/calibredb list --library-path \"" . $object['library-folder'] . "\" 2>&1";
+        $cmd = "/opt/calibre/calibredb list --library-path \"" . $object['library-folder'] . "\" -f title,authors --separator \"\t\" 2>&1";
         OMVUtil::exec($cmd, $output, $result);
 
         if ($result !== 0)
             throw new OMVException(OMVErrorMsg::E_EXEC_FAILED, $cmd, implode("\n", $output));
 
         // Get column names
-        $cols = array_map(function($a)
-        {
-            return preg_replace("/[^A-Z]+/", '', $a);
-        }, preg_split('/\s+/', trim(array_shift($output))));
-
+        $cols = array("id","title","author");
         $split_limit = count($cols);
+        array_shift($output);
 
         $objects = array();
         foreach ($output as $line) {
             if (trim($line) == '')
                 continue;
 
-            $objects[] = array_combine($cols, preg_split('/\s+/', trim($line), $split_limit));
+            $objects[] = array_combine($cols, preg_split('/\t/', trim($line), $split_limit));
         }
 
         return array(
