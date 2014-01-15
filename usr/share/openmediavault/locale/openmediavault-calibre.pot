@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: openmediavault-calibre\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-15 11:02-0600\n"
+"POT-Creation-Date: 2014-01-15 11:47-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,13 +17,22 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgid "Author"
+msgstr ""
+
 msgid "Book Import"
+msgstr ""
+
+msgid "Books"
 msgstr ""
 
 msgid "Calibre"
 msgstr ""
 
 msgid "Enable"
+msgstr ""
+
+msgid "ID"
 msgstr ""
 
 msgid "Import"
@@ -66,6 +75,9 @@ msgid "The location of books to import."
 msgstr ""
 
 msgid "The maximum size for displayed covers. Default is '600x800' - optional"
+msgstr ""
+
+msgid "Title"
 msgstr ""
 
 msgid "Username"
