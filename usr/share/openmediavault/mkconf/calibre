@@ -63,6 +63,8 @@ if [ "${calibre_home}" != "${libraryfolder}" ]; then
 
     cp -rfp ${calibre_home}/* ${libraryfolder}/
     rm -rf ${calibre_home}
-
+    
+    /usr/sbin/usermod -d "${libraryfolder}" calibre
+    
     /etc/init.d/calibre start
 fi
