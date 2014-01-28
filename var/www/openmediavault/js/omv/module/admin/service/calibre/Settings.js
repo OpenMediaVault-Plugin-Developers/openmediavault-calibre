@@ -34,6 +34,19 @@ Ext.define("OMV.module.admin.service.calibre.Settings", {
     rpcGetMethod : "getSettings",
     rpcSetMethod : "setSettings",
 
+    plugins      : [{
+        ptype        : "linkedfields",
+        correlations : [{
+            name       : [
+                "openweb"
+            ],
+            conditions : [
+                { name  : "enable", value : false }
+            ],
+            properties : "disabled"
+        }]
+    }],
+    
     initComponent : function() {
         var me = this;
 
@@ -45,8 +58,13 @@ Ext.define("OMV.module.admin.service.calibre.Settings", {
             if (!parent)
                 return;
 
+            var booksPanel = parent.down('panel[title=' + _("Books") + ']');
             var webPanel = parent.down('panel[title=' + _("Web Interface") + ']');
 
+            if (webPanel) {
+                checked ? booksPanel.enable() : booksPanel.disable();
+            }
+            
             if (webPanel) {
                 checked ? webPanel.enable() : webPanel.disable();
                 showtab ? webPanel.tab.show() : webPanel.tab.hide();
@@ -157,6 +175,13 @@ Ext.define("OMV.module.admin.service.calibre.Settings", {
                 fieldLabel : _("Show Tab"),
                 boxLabel   : _("Show tab containing web interface frame."),
                 checked    : false
+            },{
+                xtype    : "button",
+                name     : "openweb",
+                text     : _("Open Web Interface"),
+                disabled : true,
+                handler  : Ext.Function.bind(me.onOpenWebButton, me, [me]),
+                margin   : "0 0 5 0"
             }]
         },{
             xtype         : "fieldset",
@@ -196,6 +221,11 @@ Ext.define("OMV.module.admin.service.calibre.Settings", {
                 margin  : "0 0 5 0"
             }]
         }];
+    },
+    
+    onOpenWebButton : function() {
+        var me = this;
+        window.open("http://" + window.location.hostname + ":" + me.getForm().findField("port").getValue(), "_blank");
     }
 });
 

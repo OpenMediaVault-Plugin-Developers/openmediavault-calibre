@@ -26,7 +26,13 @@ Ext.define("OMV.module.admin.service.calibre.WebInterface", {
 
     initComponent : function() {
         var me = this;
-        var link = 'http://' + location.hostname + ':8080';
+        var parent = me.up('tabpanel');
+
+        if (!parent)
+            return;
+
+        var settingsPanel = parent.down('panel[title=' + _("Settings") + ']');
+        var link = "http://" + window.location.hostname + ":" + settingsPanel.getForm().findField("port").getValue();
 
         me.html = "<iframe src='" + link + "' width='100%' height='100%' />";
         me.callParent(arguments);
