@@ -20,21 +20,30 @@
  */
 // require("js/omv/WorkspaceManager.js")
 // require("js/omv/workspace/panel/Panel.js")
+// require("js/omv/Rpc.js")
+// require("js/omv/data/Store.js")
+// require("js/omv/data/Model.js")
+// require("js/omv/data/proxy/Rpc.js")
 
 Ext.define("OMV.module.admin.service.calibre.WebInterface", {
     extend : "OMV.workspace.panel.Panel",
 
     initComponent : function() {
         var me = this;
-        var parent = me.up('tabpanel');
 
-        if (!parent)
-            return;
+        OMV.Rpc.request({
+            scope    : this,
+            callback : function(id, success, response) {
+                var link = "http://" + window.location.hostname + ":" + port;
+                me.html = "<iframe src='" + link + "' width='100%' height='100%' />";
+            },
+            relayErrors : false,
+            rpcData     : {
+                service  : "Calibre",
+                method   : "getSettings"
+            }
+        });
 
-        var settingsPanel = parent.down('panel[title=' + _("Settings") + ']');
-        var link = "http://" + window.location.hostname + ":" + settingsPanel.getForm().findField("port").getValue();
-
-        me.html = "<iframe src='" + link + "' width='100%' height='100%' />";
         me.callParent(arguments);
     }
 });
