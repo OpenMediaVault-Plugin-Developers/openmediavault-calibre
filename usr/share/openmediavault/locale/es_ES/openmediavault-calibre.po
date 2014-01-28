@@ -1,0 +1,94 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# Raul Fernandez Garcia <raulfg3@gmail.com>, 2014
+msgid ""
+msgstr ""
+"Project-Id-Version: openmediavault-calibre\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-01-15 14:55-0600\n"
+"PO-Revision-Date: 2014-01-22 12:34+0000\n"
+"Last-Translator: Raul Fernandez Garcia <raulfg3@gmail.com>\n"
+"Language-Team: Spanish (Spain) (http://www.transifex.com/projects/p/openmediavault-calibre/language/es_ES/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: es_ES\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Author"
+msgstr "Autor"
+
+msgid "Book Import"
+msgstr "Importar Libro"
+
+msgid "Books"
+msgstr "Libros"
+
+msgid "Calibre"
+msgstr "Calibre"
+
+msgid "Cover Size"
+msgstr "Tamaño de la portada"
+
+msgid "Enable"
+msgstr "Habilitar"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Import"
+msgstr "Importar"
+
+msgid "Library Folder"
+msgstr "Carpeta de la libreria"
+
+msgid "Library Volume"
+msgstr "Volumen de la libreria"
+
+msgid "Password"
+msgstr "Contraseña"
+
+msgid "Port"
+msgstr "Puerto"
+
+msgid "Port to listen on."
+msgstr "Puerto de escucha."
+
+msgid "Select a volume ..."
+msgstr "Seleccionar un volumen ..."
+
+msgid "Set a password to restrict access - optional"
+msgstr "Activar contraseña para restringir el acceso - Opcional"
+
+msgid "Settings"
+msgstr "Opciones"
+
+msgid "Shared folder"
+msgstr "Carpeta compartida"
+
+msgid "Show Tab"
+msgstr "Mostar pestaña"
+
+msgid "Show tab containing web interface frame."
+msgstr "Mostrar la pestaña con el interfaz Calibre"
+
+msgid "The location of books to import."
+msgstr "La ubicación de los libros a importar."
+
+msgid "The maximum size for displayed covers. Default is '600x800' - optional"
+msgstr "Tamaño maximo de las portadas a mostrar. Por defecto es '600x800' - Opcional"
+
+msgid "Title"
+msgstr "Título"
+
+msgid "Username"
+msgstr "Nombre de usuario"
+
+msgid "Username for access - optional"
+msgstr "Nombre de usuario para acceder - Opcional"
+
+msgid "Web Interface"
+msgstr "Interfaz Web"

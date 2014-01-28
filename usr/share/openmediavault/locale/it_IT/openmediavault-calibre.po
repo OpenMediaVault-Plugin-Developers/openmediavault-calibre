@@ -1,0 +1,94 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# polxmod <paolo.velati@gmail.com>, 2014
+msgid ""
+msgstr ""
+"Project-Id-Version: openmediavault-calibre\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-01-15 14:55-0600\n"
+"PO-Revision-Date: 2014-01-16 21:22+0000\n"
+"Last-Translator: polxmod <paolo.velati@gmail.com>\n"
+"Language-Team: Italian (http://www.transifex.com/projects/p/openmediavault-calibre/language/it/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: it\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Author"
+msgstr "Autore"
+
+msgid "Book Import"
+msgstr "Importa libro"
+
+msgid "Books"
+msgstr "Libri"
+
+msgid "Calibre"
+msgstr "Calibre"
+
+msgid "Cover Size"
+msgstr "Dimensione Copertina"
+
+msgid "Enable"
+msgstr "Abilita"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Import"
+msgstr "Importa"
+
+msgid "Library Folder"
+msgstr "Cartella Libreria"
+
+msgid "Library Volume"
+msgstr "Volume Libreria"
+
+msgid "Password"
+msgstr "Password"
+
+msgid "Port"
+msgstr "Porta"
+
+msgid "Port to listen on."
+msgstr "Porta di ascolto."
+
+msgid "Select a volume ..."
+msgstr "Seleziona un volume ..."
+
+msgid "Set a password to restrict access - optional"
+msgstr "Imposta una password per limitare l'accesso - opzionale"
+
+msgid "Settings"
+msgstr "Impostazioni"
+
+msgid "Shared folder"
+msgstr "Cartella condivisa"
+
+msgid "Show Tab"
+msgstr "Mostra Pannello"
+
+msgid "Show tab containing web interface frame."
+msgstr "Mostra pannello contenente l'interfaccia web."
+
+msgid "The location of books to import."
+msgstr "La posizione dei libri da importare."
+
+msgid "The maximum size for displayed covers. Default is '600x800' - optional"
+msgstr "La dimensione massima per le copertine mostrate. Di default è '600x800' - opzionale"
+
+msgid "Title"
+msgstr "Titolo"
+
+msgid "Username"
+msgstr "Nome utente"
+
+msgid "Username for access - optional"
+msgstr "Nome utente per l'accesso - opzionale"
+
+msgid "Web Interface"
+msgstr "Interfaccia Web"

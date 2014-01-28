@@ -1,0 +1,94 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# JanN <omv@eingeord.net>, 2014
+msgid ""
+msgstr ""
+"Project-Id-Version: openmediavault-calibre\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-01-15 14:55-0600\n"
+"PO-Revision-Date: 2014-01-27 14:55+0000\n"
+"Last-Translator: JanN <omv@eingeord.net>\n"
+"Language-Team: German (Germany) (http://www.transifex.com/projects/p/openmediavault-calibre/language/de_DE/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de_DE\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Author"
+msgstr "AutorIn"
+
+msgid "Book Import"
+msgstr "Buch-Import"
+
+msgid "Books"
+msgstr "Bücher"
+
+msgid "Calibre"
+msgstr "Calibre"
+
+msgid "Cover Size"
+msgstr "Covergröße"
+
+msgid "Enable"
+msgstr "Aktivieren"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Import"
+msgstr "Import"
+
+msgid "Library Folder"
+msgstr "Bibliotheksordner"
+
+msgid "Library Volume"
+msgstr "Bibliothekslaufwerk"
+
+msgid "Password"
+msgstr "Passwort"
+
+msgid "Port"
+msgstr "Port"
+
+msgid "Port to listen on."
+msgstr "Port auf dem gehorcht wird."
+
+msgid "Select a volume ..."
+msgstr "Wählen Sie ein Laufwerk..."
+
+msgid "Set a password to restrict access - optional"
+msgstr "Setzen Sie ein Passwort um den Zugang zu beschränken - optional"
+
+msgid "Settings"
+msgstr "Einstellungen"
+
+msgid "Shared folder"
+msgstr "Freigegebener Ordner"
+
+msgid "Show Tab"
+msgstr "Zeige Tab"
+
+msgid "Show tab containing web interface frame."
+msgstr "Zeige Tab mit dem Weboberflächen-Frame"
+
+msgid "The location of books to import."
+msgstr "Speicherort zu importierender Bücher"
+
+msgid "The maximum size for displayed covers. Default is '600x800' - optional"
+msgstr "Maximalgröße der angezeigten Cover. Voreingestellt ist 600x800px - optional"
+
+msgid "Title"
+msgstr "Titel"
+
+msgid "Username"
+msgstr "Benutzername"
+
+msgid "Username for access - optional"
+msgstr "Benutzername für geschützten Zugang - optional"
+
+msgid "Web Interface"
+msgstr "Weboberfläche"
