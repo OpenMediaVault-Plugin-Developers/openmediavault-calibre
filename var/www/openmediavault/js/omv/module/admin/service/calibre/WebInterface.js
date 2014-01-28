@@ -34,7 +34,7 @@ Ext.define("OMV.module.admin.service.calibre.WebInterface", {
         OMV.Rpc.request({
             scope    : this,
             callback : function(id, success, response) {
-                var link = "http://" + window.location.hostname + ":" + port;
+                var link = "http://" + window.location.hostname + ":" + response.port;
                 me.html = "<iframe src='" + link + "' width='100%' height='100%' />";
             },
             relayErrors : false,
