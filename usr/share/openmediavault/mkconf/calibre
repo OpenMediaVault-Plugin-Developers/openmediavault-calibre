@@ -61,6 +61,8 @@ if [ "${calibre_home}" != "${libraryfolder}" ]; then
         rm -rf ${calibre_home}
     fi
 
+    chown -R calibre:users "${libraryfolder}"
+
     /usr/sbin/usermod -d "${libraryfolder}" calibre
 
     /etc/init.d/calibre start

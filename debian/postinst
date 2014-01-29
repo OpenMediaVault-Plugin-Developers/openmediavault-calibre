@@ -48,7 +48,7 @@ case "$1" in
             object="${object}<coversize></coversize>"
             object="${object}<showtab>0</showtab>"
             object="${object}<sharedfolderref></sharedfolderref>"
-            
+
             omv_config_add_element "/config/services" "calibre" "${object}" true
         fi
 
@@ -82,6 +82,8 @@ case "$1" in
             tar -xjof ${FILE32} -C ${INSTALL_DIR}
             rm -f ${FILE32}
         fi
+
+        chown -R calibre:users ${INSTALL_DIR}
 
         insserv calibre
 
