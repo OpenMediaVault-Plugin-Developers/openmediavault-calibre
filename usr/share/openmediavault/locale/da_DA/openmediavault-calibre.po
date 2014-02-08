@@ -1,0 +1,93 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+msgid ""
+msgstr ""
+"Project-Id-Version: openmediavault-calibre\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-01-15 14:55-0600\n"
+"PO-Revision-Date: 2014-02-07 13:06+0000\n"
+"Last-Translator: ryecoaaron <aaron27@ryecoinc.com>\n"
+"Language-Team: Danish (http://www.transifex.com/projects/p/openmediavault-calibre/language/da/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: da\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Author"
+msgstr ""
+
+msgid "Book Import"
+msgstr ""
+
+msgid "Books"
+msgstr ""
+
+msgid "Calibre"
+msgstr ""
+
+msgid "Cover Size"
+msgstr ""
+
+msgid "Enable"
+msgstr ""
+
+msgid "ID"
+msgstr ""
+
+msgid "Import"
+msgstr ""
+
+msgid "Library Folder"
+msgstr ""
+
+msgid "Library Volume"
+msgstr ""
+
+msgid "Password"
+msgstr ""
+
+msgid "Port"
+msgstr ""
+
+msgid "Port to listen on."
+msgstr ""
+
+msgid "Select a volume ..."
+msgstr ""
+
+msgid "Set a password to restrict access - optional"
+msgstr ""
+
+msgid "Settings"
+msgstr ""
+
+msgid "Shared folder"
+msgstr ""
+
+msgid "Show Tab"
+msgstr ""
+
+msgid "Show tab containing web interface frame."
+msgstr ""
+
+msgid "The location of books to import."
+msgstr ""
+
+msgid "The maximum size for displayed covers. Default is '600x800' - optional"
+msgstr ""
+
+msgid "Title"
+msgstr ""
+
+msgid "Username"
+msgstr ""
+
+msgid "Username for access - optional"
+msgstr ""
+
+msgid "Web Interface"
+msgstr ""

@@ -1,0 +1,93 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+msgid ""
+msgstr ""
+"Project-Id-Version: openmediavault-calibre\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-01-15 14:55-0600\n"
+"PO-Revision-Date: 2014-01-31 12:37+0000\n"
+"Last-Translator: kansuke <kansuke4649@gmail.com>\n"
+"Language-Team: Japanese (Japan) (http://www.transifex.com/projects/p/openmediavault-calibre/language/ja_JP/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ja_JP\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Author"
+msgstr "著者"
+
+msgid "Book Import"
+msgstr "書籍のインポート"
+
+msgid "Books"
+msgstr "書籍"
+
+msgid "Calibre"
+msgstr "Calibre"
+
+msgid "Cover Size"
+msgstr "カバーサイズ"
+
+msgid "Enable"
+msgstr "有効"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Import"
+msgstr "インポート"
+
+msgid "Library Folder"
+msgstr "ライブラリフォルダ"
+
+msgid "Library Volume"
+msgstr "ライブラリボリューム"
+
+msgid "Password"
+msgstr "パスワード"
+
+msgid "Port"
+msgstr "ポート"
+
+msgid "Port to listen on."
+msgstr "待ちうけポート。"
+
+msgid "Select a volume ..."
+msgstr "ボリュームの選択 ..."
+
+msgid "Set a password to restrict access - optional"
+msgstr "アクセスを制限するためのパスワードを設定する - オプション"
+
+msgid "Settings"
+msgstr "設定"
+
+msgid "Shared folder"
+msgstr "共有フォルダ"
+
+msgid "Show Tab"
+msgstr "タブの表示"
+
+msgid "Show tab containing web interface frame."
+msgstr "Webインタフェースフレームを含むタブを表示します。"
+
+msgid "The location of books to import."
+msgstr "インポートする書籍の場所。"
+
+msgid "The maximum size for displayed covers. Default is '600x800' - optional"
+msgstr "表示されるカバーの最大サイズ。デフォルトは'600x800'です。 - オプション"
+
+msgid "Title"
+msgstr "タイトル"
+
+msgid "Username"
+msgstr "ユーザー名"
+
+msgid "Username for access - optional"
+msgstr "アクセスのためのユーザー名 - オプション"
+
+msgid "Web Interface"
+msgstr "ウェブインタフェース"
