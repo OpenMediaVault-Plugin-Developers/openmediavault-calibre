@@ -1,3 +1,10 @@
+openmediavault-calibre (0.5.4) stable; urgency=low
+
+  * Update locales
+  * Recurse subdirectories when importing books
+
+ -- OpenMediaVault Plugin Developers <plugins@omv-extras.org>  Mon, 10 Feb 2014 06:51:27 -0500
+
 openmediavault-calibre (0.5.3) stable; urgency=low
 
   * Update locales
