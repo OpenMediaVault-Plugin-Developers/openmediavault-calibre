@@ -21,6 +21,9 @@ set -e
 . /usr/share/openmediavault/scripts/helper-functions
 
 CALIBRE_CONFIG="/etc/calibre-server.conf";
+RUN_AS="calibre"
+RUN_GRP="users"
+SERVICE="calibre"
 
 libraryfolder=$(omv_config_get "//services/calibre/library-folder")
 port=$(omv_config_get "//services/calibre/port")
@@ -43,16 +46,17 @@ if [ "$(omv_config_get "//services/calibre/enable")" != "1" ]; then
 fi
 
 # move data folder
-calibre_home="$(getent passwd calibre | cut -d: -f6)"
+calibre_home="$(getent passwd ${RUN_AS} | cut -d: -f6)"
+chown -R ${RUN_AS}:${RUN_GRP} "${calibre_home}"
 
 if [ "${calibre_home}" != "${libraryfolder}" ]; then
-    /etc/init.d/calibre stop
+    /etc/init.d/${SERVICE} stop
 
     if [ ! -d "${libraryfolder}" ]; then
         mkdir -p "${libraryfolder}"
     fi
 
-    chown calibre:users "${libraryfolder}"
+    chown ${RUN_AS}:${RUN_GRP} "${libraryfolder}"
 
     if [ -d "${calibre_home}" ]; then
         touch ${calibre_home}/temp
@@ -61,9 +65,9 @@ if [ "${calibre_home}" != "${libraryfolder}" ]; then
         rm -rf ${calibre_home}
     fi
 
-    chown -R calibre:users "${libraryfolder}"
+    chown -R ${RUN_AS}:${RUN_GRP} "${libraryfolder}"
 
-    /usr/sbin/usermod -d "${libraryfolder}" calibre
+    /usr/sbin/usermod -d "${libraryfolder}" ${RUN_AS}
 
-    /etc/init.d/calibre start
+    /etc/init.d/${SERVICE} start
 fi

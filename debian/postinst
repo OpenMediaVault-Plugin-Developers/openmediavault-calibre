@@ -91,6 +91,9 @@ case "$1" in
             update-rc.d calibre disable
         fi
 
+        calibre_home="$(getent passwd calibre | cut -d: -f6)"
+        chown -R calibre:users "${calibre_home}"
+
         echo "Create config file..."
         /usr/share/openmediavault/mkconf/calibre
 

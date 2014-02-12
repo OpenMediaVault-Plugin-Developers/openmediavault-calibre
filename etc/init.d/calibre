@@ -74,6 +74,7 @@ is_running () {
 start_calibre () {
     if ! is_running; then
         echo "Starting $DESC"
+        chown $RUN_AS $PID_PATH
         sudo -u $RUN_AS $DAEMON $DAEMON_OPTS &> /dev/null
     else
         echo "$DESC is running"
