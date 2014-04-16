@@ -95,7 +95,7 @@ case "$1" in
         chown -R calibre:users "${calibre_home}"
 
         echo "Create config file..."
-        /usr/share/openmediavault/mkconf/calibre
+        omv-mkconf calibre
 
         dpkg-trigger update-fixperms
         dpkg-trigger update-locale
