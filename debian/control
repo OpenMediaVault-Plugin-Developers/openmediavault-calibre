@@ -7,7 +7,7 @@ Standards-Version: 3.9.3
 
 Package: openmediavault-calibre
 Architecture: all
-Depends: openmediavault (>= 0.6.13), python, bzip2, xdg-utils,
+Depends: openmediavault (>= 0.6.0.13), python, bzip2, xdg-utils,
  imagemagick, python-imaging, python-mechanize, python-lxml,
  python-dateutil, python-cssutils, python-beautifulsoup,
  python-dnspython, python-poppler, libpodofo-utils, libwmf-bin,
