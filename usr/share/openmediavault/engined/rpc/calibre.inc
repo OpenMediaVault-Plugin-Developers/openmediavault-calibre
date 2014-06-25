@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @author    Volker Theile <volker.theile@openmediavault.org>
  * @copyright Copyright (C) 2009-2014 Volker Theile
@@ -18,7 +17,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 require_once ("openmediavault/object.inc");
 require_once ("openmediavault/error.inc");
 require_once ("openmediavault/util.inc");
@@ -26,12 +24,27 @@ require_once ("openmediavault/rpc.inc");
 require_once ("openmediavault/notify.inc");
 
 class OMVRpcServiceCalibre extends OMVRpcServiceAbstract {
-    private function getXpath() {
-        return "//services/calibre";
-    }
 
     public function getName() {
         return 'calibre';
+    }
+
+    private function getPluginName() {
+        return strtolower( $this->getName() );
+    }
+
+    private function getXPath() {
+        $path = sprintf( "//services/%s", $this->getPluginName() );
+        return $path;
+    }
+
+    private function getEventMessagePath() {
+        $path = sprintf( "org.openmediavault.services.%s", $this->getPluginName() );
+        return $path;
+    }
+
+    private function getProgram() {
+        return "/opt/calibre/calibredb";
     }
 
     public function initialize() {
@@ -115,7 +128,7 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract {
 
         // Notify configuration changes
         $dispatcher = &OMVNotifyDispatcher::getInstance();
-        $dispatcher->notify(OMV_NOTIFY_MODIFY, "org.openmediavault.services.calibre", $object);
+        $dispatcher->notify(OMV_NOTIFY_MODIFY, $this->getEventMessagePath(), $object);
 
         return $object;
     }
@@ -126,15 +139,14 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract {
         // Validate the RPC caller context.
         $this->validateMethodContext($context, array( "role" => OMV_ROLE_ADMINISTRATOR ));
 
-        $xpath = "//services/calibre";
-        $object = $xmlConfig->get($xpath);
+        $object = $xmlConfig->get( $this->getXpath() );
         if(is_null($object))
             throw new OMVException(OMVErrorMsg::E_CONFIG_GET_OBJECT_FAILED, $xpath);
 
         if( strlen($object['sharedfolderref']) > 30 ) {
             $sfPath = OMVRpc::exec("ShareMgmt", "getPath", array("uuid" => $object['sharedfolderref']), $context);
 
-            $cmd = "/opt/calibre/calibredb add --recurse --library-path \"" . $object['library-folder'] . "\" $sfPath 2>&1";
+            $cmd = $this->getProgram() . " add --recurse --library-path \"" . $object['library-folder'] . "\" $sfPath 2>&1";
             if(0 !== $this->exec($cmd, $output))
                 throw new OMVException(OMVErrorMsg::E_EXEC_FAILED, $cmd, implode("\n", $output));
         }
@@ -146,12 +158,11 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract {
         // Validate the RPC caller context.
         $this->validateMethodContext($context, array( "role" => OMV_ROLE_ADMINISTRATOR ));
 
-        $xpath = "//services/calibre";
-        $object = $xmlConfig->get($xpath);
+        $object = $xmlConfig->get( $this->getXpath() );
         if(is_null($object))
             throw new OMVException(OMVErrorMsg::E_CONFIG_GET_OBJECT_FAILED, $xpath);
 
-        $cmd = "/opt/calibre/calibredb list --library-path \"" . $object['library-folder'] . "\" -f title,authors --separator \"\t\" 2>&1";
+        $cmd = $this->getProgram() . " list --library-path \"" . $object['library-folder'] . "\" -f title,authors --separator \"\t\" 2>&1";
         OMVUtil::exec($cmd, $output, $result);
 
         if ($result !== 0)
@@ -190,12 +201,11 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract {
             }
         }');
 
-        $xpath = "//services/calibre";
-        $object = $xmlConfig->get($xpath);
+        $object = $xmlConfig->get( $this->getXpath() );
         if(is_null($object))
             throw new OMVException(OMVErrorMsg::E_CONFIG_GET_OBJECT_FAILED, $xpath);
 
-        $cmd = "/opt/calibre/calibredb remove --library-path \"" . $object['library-folder'] . "\" " . $params['id'] . " 2>&1";
+        $cmd = $this->getProgram() . " remove --library-path \"" . $object['library-folder'] . "\" " . $params['id'] . " 2>&1";
         if(0 !== $this->exec($cmd, $output))
             throw new OMVException(OMVErrorMsg::E_EXEC_FAILED, $cmd, implode("\n", $output));
     }
