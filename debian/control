@@ -12,7 +12,7 @@ Depends: openmediavault (>= 0.6.0.13), python, bzip2, xdg-utils,
  python-dateutil, python-cssutils, python-beautifulsoup,
  python-dnspython, python-poppler, libpodofo-utils, libwmf-bin,
  python-chm, python-apsw, python-psutil, python-netifaces,
- libmtp8, python-dbus, python-django-tagging, python-pkg-resources,
+ libmtp9, python-dbus, python-django-tagging, python-pkg-resources,
  python-pypdf, python-qt4 ${misc:Depends}
 Description: Calibre plugin for OpenMediaVault.
  Calibre is a free and open source e-book library management

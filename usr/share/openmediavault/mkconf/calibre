@@ -31,6 +31,7 @@ port=$(omv_config_get "${XPATH}/port")
 username=$(omv_config_get "${XPATH}/username")
 password=$(omv_config_get "${XPATH}/password")
 maxcover=$(omv_config_get "${XPATH}/maxcover")
+showtab=$(omv_config_get "${XPATH}/showtab")
 
 # Create calibre config file
 cat <<EOF > ${CALIBRE_CONFIG}
@@ -71,4 +72,13 @@ if [ "${calibre_home}" != "${libraryfolder}" ]; then
     /usr/sbin/usermod -d "${libraryfolder}" ${RUN_AS}
 
     /etc/init.d/${SERVICE} start
+fi
+
+# Disable csp if show tab is enable
+if [ ${showtab} != 0 ]; then
+    omv_set_default OMV_NGINX_SITE_WEBGUI_SECURITY_CSP_ENABLE 0
+    omv_set_default OMV_NGINX_SITE_WEBGUI_SECURITY_XFRAMEOPTIONS_ENABLE false
+
+    omv-mkconf nginx
+    invoke-rc.d nginx restart
 fi
