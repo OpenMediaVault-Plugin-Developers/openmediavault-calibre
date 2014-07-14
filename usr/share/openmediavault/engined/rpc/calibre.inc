@@ -151,7 +151,7 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract {
         $sfref = $params['sharedfolderref'];
 
         if( strlen($sfref) < 30 )
-            throw new OMVException(OMVErrorMsg::E_CONFIG_GET_OBJECT_FAILED, "Please set shared folder to import books.");
+            throw new OMVException(OMVErrorMsg::E_MISC_FAILURE, "Please set shared folder to import books.");
 
         $object = $xmlConfig->get( $this->getXpath() );
         if(is_null($object))
