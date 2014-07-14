@@ -172,9 +172,12 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract {
             $bgOutputFilename = $this->createBgProcOutput();
             $this->updateBgProcStatus($bgStatusFilename, "outputfilename", $bgOutputFilename);
 
-            $cmd = $this->getProgram() . " add --recurse --library-path \"" . $object['library-folder'] . "\" $sfPath 2>&1";
-
+            $cmd = "echo 'Starting import...\nThis can take a long time when importing large book collections.\n'";
             $this->exec($cmd, $output, $bgOutputFilename);
+
+            $cmd = $this->getProgram() . " add --recurse --library-path \"" . $object['library-folder'] . "\" $sfPath 2>&1";
+            $this->exec($cmd, $output, $bgOutputFilename);
+
             $this->finalizeBgProcStatus($bgStatusFilename, $output);
 
         } catch(Exception $e) {
