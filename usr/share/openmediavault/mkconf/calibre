@@ -26,15 +26,73 @@ RUN_GRP="users"
 SERVICE="calibre"
 XPATH="//services/${SERVICE}"
 
-libraryfolder=$(omv_config_get "${XPATH}/library-folder")
-port=$(omv_config_get "${XPATH}/port")
-username=$(omv_config_get "${XPATH}/username")
-password=$(omv_config_get "${XPATH}/password")
-maxcover=$(omv_config_get "${XPATH}/maxcover")
-showtab=$(omv_config_get "${XPATH}/showtab")
+LINK32="http://status.calibre-ebook.com/dist/linux32"
+LINK64="http://status.calibre-ebook.com/dist/linux64"
+FILE32="/tmp/calibre32.tar.bz2"
+FILE64="/tmp/calibre64.tar.bz2"
+INSTALL_DIR="/opt/calibre"
 
-# Create calibre config file
-cat <<EOF > ${CALIBRE_CONFIG}
+install()
+{
+    AMD64=false
+    ARCH="`/bin/uname -m`"
+
+    case "$ARCH" in
+        *x86_64*)
+            AMD64=true
+            ;;
+        *)
+            AMD64=false
+            ;;
+    esac
+
+    echo "Installing Calibre..."
+    mkdir -p ${INSTALL_DIR}
+    chown calibre:users ${INSTALL_DIR}
+
+    if $AMD64; then
+        if [ -f "${FILE64}" ]; then
+            rm -f ${FILE64}
+        fi
+        wget ${LINK64} -O ${FILE64}
+
+        echo "Extracting..."
+        tar -xjof ${FILE64} -C ${INSTALL_DIR}
+        rm -f ${FILE64}
+    else
+        if [ -f "${FILE32}" ]; then
+            rm -f ${FILE32}
+        fi
+        wget ${LINK32} -O ${FILE32}
+
+        echo "Extracting..."
+        tar -xjof ${FILE32} -C ${INSTALL_DIR}
+        rm -f ${FILE32}
+    fi
+
+    chown -R calibre:users ${INSTALL_DIR}
+
+    insserv calibre
+
+    if [ "$(omv_config_get "//services/calibre/enable")" != "1" ]; then
+        update-rc.d calibre disable
+    fi
+
+    calibre_home="$(getent passwd calibre | cut -d: -f6)"
+    chown -R calibre:users "${calibre_home}"
+}
+
+config()
+{
+    libraryfolder=$(omv_config_get "${XPATH}/library-folder")
+    port=$(omv_config_get "${XPATH}/port")
+    username=$(omv_config_get "${XPATH}/username")
+    password=$(omv_config_get "${XPATH}/password")
+    maxcover=$(omv_config_get "${XPATH}/maxcover")
+    showtab=$(omv_config_get "${XPATH}/showtab")
+
+    # Create calibre config file
+    cat <<EOF > ${CALIBRE_CONFIG}
 LIBRARY=${libraryfolder}
 PORT=${port}
 USERNAME=${username}
@@ -43,42 +101,61 @@ MAX_COVER=${maxcover}
 EXTRA_OPTS=""
 EOF
 
-if [ "$(omv_config_get "//services/calibre/enable")" != "1" ]; then
-    exit 0
-fi
+    # move data folder
+    calibre_home="$(getent passwd ${RUN_AS} | cut -d: -f6)"
+    chown -R ${RUN_AS}:${RUN_GRP} "${calibre_home}"
 
-# move data folder
-calibre_home="$(getent passwd ${RUN_AS} | cut -d: -f6)"
-chown -R ${RUN_AS}:${RUN_GRP} "${calibre_home}"
+    if [ "${calibre_home}" != "${libraryfolder}" ]; then
+        /etc/init.d/${SERVICE} stop
 
-if [ "${calibre_home}" != "${libraryfolder}" ]; then
-    /etc/init.d/${SERVICE} stop
+        if [ ! -d "${libraryfolder}" ]; then
+            mkdir -p "${libraryfolder}"
+        fi
 
-    if [ ! -d "${libraryfolder}" ]; then
-        mkdir -p "${libraryfolder}"
+        chown ${RUN_AS}:${RUN_GRP} "${libraryfolder}"
+
+        if [ -d "${calibre_home}" ]; then
+            touch ${calibre_home}/temp
+
+            cp -rfp ${calibre_home}/* ${libraryfolder}/
+            rm -rf ${calibre_home}
+        fi
+
+        chown -R ${RUN_AS}:${RUN_GRP} "${libraryfolder}"
+
+        /usr/sbin/usermod -d "${libraryfolder}" ${RUN_AS}
+
+        /etc/init.d/${SERVICE} start
     fi
 
-    chown ${RUN_AS}:${RUN_GRP} "${libraryfolder}"
+    # Disable csp if show tab is enable
+    if [ ${showtab} != 0 ]; then
+        omv_set_default OMV_NGINX_SITE_WEBGUI_SECURITY_CSP_ENABLE 0
+        omv_set_default OMV_NGINX_SITE_WEBGUI_SECURITY_XFRAMEOPTIONS_ENABLE false
 
-    if [ -d "${calibre_home}" ]; then
-        touch ${calibre_home}/temp
+        omv-mkconf nginx
+        invoke-rc.d nginx restart
+    fi
+}
 
-        cp -rfp ${calibre_home}/* ${libraryfolder}/
-        rm -rf ${calibre_home}
+case $2 in
+    install)
+        if [ "$(omv_config_get "//services/calibre/enable")" != "1" ]; then
+            install
+        fi
+    ;;
+
+    update)
+        install
+    ;;
+
+    *)
+    ;;
+esac
+
+    if [ "$(omv_config_get "//services/calibre/enable")" != "0" ]; then
+        config
+        service calibre start
     fi
 
-    chown -R ${RUN_AS}:${RUN_GRP} "${libraryfolder}"
-
-    /usr/sbin/usermod -d "${libraryfolder}" ${RUN_AS}
-
-    /etc/init.d/${SERVICE} start
-fi
-
-# Disable csp if show tab is enable
-if [ ${showtab} != 0 ]; then
-    omv_set_default OMV_NGINX_SITE_WEBGUI_SECURITY_CSP_ENABLE 0
-    omv_set_default OMV_NGINX_SITE_WEBGUI_SECURITY_XFRAMEOPTIONS_ENABLE false
-
-    omv-mkconf nginx
-    invoke-rc.d nginx restart
-fi
+exit 0

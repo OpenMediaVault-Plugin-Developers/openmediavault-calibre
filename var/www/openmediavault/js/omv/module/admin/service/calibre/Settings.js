@@ -46,7 +46,7 @@ Ext.define("OMV.module.admin.service.calibre.Settings", {
             properties : "disabled"
         }]
     }],
-    
+
     initComponent : function() {
         var me = this;
 
@@ -64,7 +64,7 @@ Ext.define("OMV.module.admin.service.calibre.Settings", {
             if (webPanel) {
                 checked ? booksPanel.enable() : booksPanel.disable();
             }
-            
+
             if (webPanel) {
                 checked ? webPanel.enable() : webPanel.disable();
                 showtab ? webPanel.tab.show() : webPanel.tab.hide();
@@ -181,7 +181,7 @@ Ext.define("OMV.module.admin.service.calibre.Settings", {
                 text     : _("Open Web Interface"),
                 disabled : true,
                 handler  : Ext.Function.bind(me.onOpenWebButton, me, [me]),
-                margin   : "0 0 5 0"
+                margin   : "0 0 7 0"
             }]
         },{
             xtype         : "fieldset",
@@ -204,28 +204,83 @@ Ext.define("OMV.module.admin.service.calibre.Settings", {
                 name    : "import",
                 text    : _("Import"),
                 scope   : this,
-                handler : function() {
-                    // Execute RPC.
-                    OMV.Rpc.request({
-                        scope    : this,
-                        callback : function(id, success, response) {
-                            this.doReload();
-                        },
-                        relayErrors : false,
-                        rpcData     : {
-                            service  : "Calibre",
-                            method   : "doImport"
-                        }
-                    });
-                },
-                margin  : "0 0 5 0"
+                handler : Ext.Function.bind(me.onImportButton, me, [ me ]),
+                margin  : "0 0 7 0"
+            }]
+        },{
+            xtype         : "fieldset",
+            title         : _("Update"),
+            fieldDefaults : {
+                labelSeparator : ""
+            },
+            items : [{
+                xtype   : "button",
+                name    : "update",
+                text    : _("Update Calibre"),
+                scope   : this,
+                handler : Ext.Function.bind(me.onUpdateButton, me, [ me ]),
+                margin  : "5 0 7 0"
             }]
         }];
     },
-    
+
+    onImportButton : function() {
+        var me = this;
+        var wnd = Ext.create("OMV.window.Execute", {
+            title           : _("Importing..."),
+            rpcService      : "Calibre",
+            rpcMethod       : "doImport",
+            rpcParams       : {
+                sharedfolderref : me.getForm().findField("sharedfolderref").getValue()
+            },
+            rpcIgnoreErrors : true,
+            hideStartButton : true,
+            hideStopButton  : false,
+            listeners       : {
+                scope     : me,
+                finish    : function(wnd, response) {
+                    wnd.appendValue(_("Done..."));
+                    wnd.setButtonDisabled("close", false);
+                },
+                exception : function(wnd, error) {
+                    OMV.MessageBox.error(null, error);
+                    wnd.setButtonDisabled("close", false);
+                }
+            }
+        });
+        wnd.setButtonDisabled("close", true);
+        wnd.show();
+        wnd.start();
+    },
+
     onOpenWebButton : function() {
         var me = this;
         window.open("http://" + window.location.hostname + ":" + me.getForm().findField("port").getValue(), "_blank");
+    },
+
+    onUpdateButton: function() {
+        var me = this;
+        var wnd = Ext.create("OMV.window.Execute", {
+            title      : _("Update Calibre..."),
+            rpcService : "Calibre",
+            rpcMethod  : "doUpdate",
+            hideStartButton : true,
+            hideStopButton  : true,
+            listeners       : {
+                scope     : me,
+                finish    : function(wnd, response) {
+                    wnd.appendValue(_("Done..."));
+                    wnd.setButtonDisabled("close", false);
+                },
+                exception : function(wnd, error) {
+                    OMV.MessageBox.error(null, error);
+                    wnd.setButtonDisabled("close", false);
+                }
+            }
+        });
+        wnd.setButtonDisabled("close", true);
+        wnd.show();
+        wnd.start();
     }
 });
 

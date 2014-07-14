@@ -1,3 +1,11 @@
+openmediavault-calibre (1.0) stable; urgency=low
+
+  * Fix import and show more output
+  * Update Calibre button
+  * Update locales
+
+ -- OpenMediaVault Plugin Developers <plugins@omv-extras.org>  Mon, 14 Jul 2014 10:27:28 -0500
+
 openmediavault-calibre (0.6.0) stable; urgency=low
 
   * Update for kralizec

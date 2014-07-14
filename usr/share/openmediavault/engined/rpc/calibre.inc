@@ -53,6 +53,7 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract {
         $this->registerMethod('doImport');
         $this->registerMethod('getBookList');
         $this->registerMethod('deleteBook');
+        $this->registerMethod('doUpdate');
     }
 
     /**
@@ -139,16 +140,46 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract {
         // Validate the RPC caller context.
         $this->validateMethodContext($context, array( "role" => OMV_ROLE_ADMINISTRATOR ));
 
+        // Validate the parameters of the RPC service method.
+        $this->validateMethodParams($params, '{
+            "type"       : "object",
+            "properties" : {
+                "sharedfolderref" : { "type" : "string" }
+            }
+        }');
+
+        $sfref = $params['sharedfolderref'];
+
         $object = $xmlConfig->get( $this->getXpath() );
         if(is_null($object))
             throw new OMVException(OMVErrorMsg::E_CONFIG_GET_OBJECT_FAILED, $xpath);
 
-        if( strlen($object['sharedfolderref']) > 30 ) {
-            $sfPath = OMVRpc::exec("ShareMgmt", "getPath", array("uuid" => $object['sharedfolderref']), $context);
+        if( strlen($sfref) < 30 )
+            throw new OMVException(OMVErrorMsg::E_CONFIG_GET_OBJECT_FAILED, "Please set shared folder to import books.");
+
+        // Create a background process.
+        $bgStatusFilename = $this->createBgProcStatus();
+        $pid = $this->fork();
+        if($pid > 0) { // Parent process.
+            $this->initializeBgProcStatus($bgStatusFilename, $pid);
+            return $bgStatusFilename;
+        }
+
+        $sfPath = OMVRpc::exec("ShareMgmt", "getPath", array("uuid" => $sfref), $context);
+
+        // Child process.
+        try {
+            $bgOutputFilename = $this->createBgProcOutput();
+            $this->updateBgProcStatus($bgStatusFilename, "outputfilename", $bgOutputFilename);
 
             $cmd = $this->getProgram() . " add --recurse --library-path \"" . $object['library-folder'] . "\" $sfPath 2>&1";
-            if(0 !== $this->exec($cmd, $output))
-                throw new OMVException(OMVErrorMsg::E_EXEC_FAILED, $cmd, implode("\n", $output));
+
+            $this->exec($cmd, $output, $bgOutputFilename);
+            $this->finalizeBgProcStatus($bgStatusFilename, $output);
+
+        } catch(Exception $e) {
+            $this->finalizeBgProcStatus($bgStatusFilename, "", $e);
+            exit(1);
         }
     }
 
@@ -175,7 +206,7 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract {
 
         $objects = array();
         foreach ($output as $line) {
-            if (intval(trim($line)) < 1)
+            if (intval(trim($line)) < 2)
                 continue;
 
             $objects[] = array_combine($cols, preg_split('/\t/', trim($line), $split_limit));
@@ -209,9 +240,36 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract {
         if(0 !== $this->exec($cmd, $output))
             throw new OMVException(OMVErrorMsg::E_EXEC_FAILED, $cmd, implode("\n", $output));
     }
+
+    function doUpdate($params, $context) {
+        // Validate the RPC caller context.
+        $this->validateMethodContext($context, array( "role" => OMV_ROLE_ADMINISTRATOR ));
+
+        // Create a background process.
+        $bgStatusFilename = $this->createBgProcStatus();
+        $pid = $this->fork();
+        if($pid > 0) { // Parent process.
+            $this->initializeBgProcStatus($bgStatusFilename, $pid);
+            return $bgStatusFilename;
+        }
+
+        // Child process.
+        try {
+            $bgOutputFilename = $this->createBgProcOutput();
+            $this->updateBgProcStatus($bgStatusFilename, "outputfilename", $bgOutputFilename);
+
+            $cmd = "omv-mkconf calibre update";
+            $this->exec($cmd, $output, $bgOutputFilename);
+            $this->finalizeBgProcStatus($bgStatusFilename, $output);
+
+            exit(0);
+        } catch(Exception $e) {
+            $this->finalizeBgProcStatus($bgStatusFilename, "", $e);
+            exit(1);
+        }
+    }
 }
 
 // Register the RPC service.
 $rpcServiceMgr = &OMVRpcServiceMgr::getInstance();
 $rpcServiceMgr->registerService(new OMVRpcServiceCalibre());
-?>
