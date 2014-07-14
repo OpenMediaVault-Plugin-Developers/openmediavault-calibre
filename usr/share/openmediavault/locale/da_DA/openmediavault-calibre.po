@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: openmediavault-calibre\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-15 14:55-0600\n"
-"PO-Revision-Date: 2014-03-10 10:28+0000\n"
-"Last-Translator: Stefan Thrane Overby <stoverby@gmail.com>\n"
+"POT-Creation-Date: 2014-07-14 12:42-0500\n"
+"PO-Revision-Date: 2014-07-14 17:43+0000\n"
+"Last-Translator: Aaron Murray <aaron27@ryecoinc.com>\n"
 "Language-Team: Danish (http://www.transifex.com/projects/p/openmediavault-calibre/language/da/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -33,6 +33,9 @@ msgstr "Calibre"
 msgid "Cover Size"
 msgstr "Cover Størrelse"
 
+msgid "Done..."
+msgstr ""
+
 msgid "Enable"
 msgstr "Aktiver"
 
@@ -42,11 +45,17 @@ msgstr "ID"
 msgid "Import"
 msgstr "Importer"
 
+msgid "Importing..."
+msgstr ""
+
 msgid "Library Folder"
 msgstr "Biblioteks Mappe"
 
 msgid "Library Volume"
 msgstr "Biblioteks Drev"
+
+msgid "Open Web Interface"
+msgstr ""
 
 msgid "Password"
 msgstr "Adgangskode"
@@ -83,6 +92,15 @@ msgstr "Den maksimale størrelse for viste covers. Standard er '600x800' - valgf
 
 msgid "Title"
 msgstr "Titel"
+
+msgid "Update"
+msgstr ""
+
+msgid "Update Calibre"
+msgstr ""
+
+msgid "Update Calibre..."
+msgstr ""
 
 msgid "Username"
 msgstr "Brugernavn"

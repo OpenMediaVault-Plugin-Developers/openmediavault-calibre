@@ -150,12 +150,12 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract {
 
         $sfref = $params['sharedfolderref'];
 
+        if( strlen($sfref) < 30 )
+            throw new OMVException(OMVErrorMsg::E_CONFIG_GET_OBJECT_FAILED, "Please set shared folder to import books.");
+
         $object = $xmlConfig->get( $this->getXpath() );
         if(is_null($object))
             throw new OMVException(OMVErrorMsg::E_CONFIG_GET_OBJECT_FAILED, $xpath);
-
-        if( strlen($sfref) < 30 )
-            throw new OMVException(OMVErrorMsg::E_CONFIG_GET_OBJECT_FAILED, "Please set shared folder to import books.");
 
         // Create a background process.
         $bgStatusFilename = $this->createBgProcStatus();
@@ -206,7 +206,7 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract {
 
         $objects = array();
         foreach ($output as $line) {
-            if (intval(trim($line)) < 2)
+            if (intval(trim($line[0])) < 1)
                 continue;
 
             $objects[] = array_combine($cols, preg_split('/\t/', trim($line), $split_limit));
