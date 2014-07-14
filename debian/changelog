@@ -1,3 +1,9 @@
+openmediavault-calibre (1.0.1) stable; urgency=low
+
+  * Add more output when importing books
+
+ -- OpenMediaVault Plugin Developers <plugins@omv-extras.org>  Mon, 14 Jul 2014 14:56:26 -0500
+
 openmediavault-calibre (1.0) stable; urgency=low
 
   * Fix import and show more output
