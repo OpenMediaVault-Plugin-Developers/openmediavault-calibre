@@ -23,31 +23,35 @@ require_once ("openmediavault/util.inc");
 require_once ("openmediavault/rpc.inc");
 require_once ("openmediavault/notify.inc");
 
-class OMVRpcServiceCalibre extends OMVRpcServiceAbstract {
-
-    public function getName() {
+class OMVRpcServiceCalibre extends OMVRpcServiceAbstract
+{
+    public function getName()
+    {
         return 'calibre';
     }
 
-    private function getPluginName() {
+    private function getPluginName()
+    {
         return strtolower( $this->getName() );
     }
 
-    private function getXPath() {
-        $path = sprintf( "//services/%s", $this->getPluginName() );
-        return $path;
+    private function getXPath()
+    {
+        return sprintf( "//services/%s", $this->getPluginName() );
     }
 
-    private function getEventMessagePath() {
-        $path = sprintf( "org.openmediavault.services.%s", $this->getPluginName() );
-        return $path;
+    private function getEventMessagePath()
+    {
+        return sprintf( "org.openmediavault.services.%s", $this->getPluginName() );
     }
 
-    private function getProgram() {
+    private function getProgram()
+    {
         return "/opt/calibre/calibredb";
     }
 
-    public function initialize() {
+    public function initialize()
+    {
         $this->registerMethod('getSettings');
         $this->registerMethod('setSettings');
         $this->registerMethod('doImport');
@@ -56,19 +60,25 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract {
         $this->registerMethod('doUpdate');
     }
 
-    /**
-     * Get main settings
-     */
-    function getSettings($params, $context) {
+    function getSettings($params, $context)
+    {
         global $xmlConfig;
 
         // Validate the RPC caller context.
-        $this->validateMethodContext($context, array( "role" => OMV_ROLE_ADMINISTRATOR ));
+        $this->validateMethodContext(
+            $context,
+            array( "role" => OMV_ROLE_ADMINISTRATOR )
+        );
 
         // Get configuration object
-        $object = $xmlConfig->get( $this->getXpath() );
+        $object = $xmlConfig->get( $this->getXPath() );
         if (is_null($object))
-            throw new OMVException( OMVErrorMsg::E_CONFIG_GET_OBJECT_FAILED, $this->getXpath() );
+        {
+            throw new OMVException(
+                OMVErrorMsg::E_CONFIG_GET_OBJECT_FAILED,
+                $this->getXPath()
+            );
+        }
 
         // Modify result data
         $object['enable']  = boolval($object['enable']);
@@ -78,14 +88,15 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract {
         return $object;
     }
 
-    /**
-     * Set main settings
-     */
-    function setSettings($params, $context) {
+    function setSettings($params, $context)
+    {
         global $xmlConfig;
 
         // Validate the RPC caller context.
-        $this->validateMethodContext($context, array( "role" => OMV_ROLE_ADMINISTRATOR ));
+        $this->validateMethodContext(
+            $context,
+            array( "role" => OMV_ROLE_ADMINISTRATOR )
+        );
 
         // Validate the parameters of the RPC service method.
         $this->validateMethodParams($params, '{
@@ -103,8 +114,8 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract {
             }
         }');
 
-        $xpath = sprintf("//system/fstab/mntent[uuid='%s']", $params['mntentref']);
-        $deviceDir = $xmlConfig->get($xpath);
+        $xPath = sprintf("//system/fstab/mntent[uuid='%s']", $params['mntentref']);
+        $deviceDir = $xmlConfig->get($xPath);
         $deviceDir = $deviceDir['dir'];
 
         $dataFolder = "{$deviceDir}/calibre-data";
@@ -124,8 +135,13 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract {
         );
 
         // Set configuration object
-        if (false === $xmlConfig->replace($this->getXpath(), $object))
-            throw new OMVException(OMVErrorMsg::E_CONFIG_SET_OBJECT_FAILED, $this->getXpath());
+        if (false === $xmlConfig->replace($this->getXPath(), $object))
+        {
+            throw new OMVException(
+                OMVErrorMsg::E_CONFIG_SET_OBJECT_FAILED,
+                $this->getXPath()
+            );
+        }
 
         // Notify configuration changes
         $dispatcher = &OMVNotifyDispatcher::getInstance();
@@ -134,11 +150,15 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract {
         return $object;
     }
 
-    public function doImport($params, $context) {
+    public function doImport($params, $context)
+    {
         global $xmlConfig;
 
         // Validate the RPC caller context.
-        $this->validateMethodContext($context, array( "role" => OMV_ROLE_ADMINISTRATOR ));
+        $this->validateMethodContext(
+            $context,
+            array( "role" => OMV_ROLE_ADMINISTRATOR )
+        );
 
         // Validate the parameters of the RPC service method.
         $this->validateMethodParams($params, '{
@@ -151,11 +171,21 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract {
         $sfref = $params['sharedfolderref'];
 
         if( strlen($sfref) < 30 )
-            throw new OMVException(OMVErrorMsg::E_MISC_FAILURE, "Please set shared folder to import books.");
+        {
+            throw new OMVException(
+                OMVErrorMsg::E_MISC_FAILURE,
+                "Please set shared folder to import books."
+            );
+        }
 
-        $object = $xmlConfig->get( $this->getXpath() );
-        if(is_null($object))
-            throw new OMVException(OMVErrorMsg::E_CONFIG_GET_OBJECT_FAILED, $xpath);
+        $object = $xmlConfig->get( $this->getXPath() );
+        if (is_null($object))
+        {
+            throw new OMVException(
+                OMVErrorMsg::E_CONFIG_GET_OBJECT_FAILED,
+                $this->getXPath()
+            );
+        }
 
         // Create a background process.
         $bgStatusFilename = $this->createBgProcStatus();
@@ -186,21 +216,36 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract {
         }
     }
 
-    public function getBookList($params, $context) {
+    public function getBookList($params, $context)
+    {
         global $xmlConfig;
 
         // Validate the RPC caller context.
-        $this->validateMethodContext($context, array( "role" => OMV_ROLE_ADMINISTRATOR ));
+        $this->validateMethodContext(
+            $context,
+            array( "role" => OMV_ROLE_ADMINISTRATOR )
+        );
 
-        $object = $xmlConfig->get( $this->getXpath() );
-        if(is_null($object))
-            throw new OMVException(OMVErrorMsg::E_CONFIG_GET_OBJECT_FAILED, $xpath);
+        $object = $xmlConfig->get( $this->getXPath() );
+        if (is_null($object))
+        {
+            throw new OMVException(
+                OMVErrorMsg::E_CONFIG_GET_OBJECT_FAILED,
+                $this->getXPath()
+            );
+        }
 
         $cmd = $this->getProgram() . " list --library-path \"" . $object['library-folder'] . "\" -f title,authors --separator \"\t\" 2>&1";
         OMVUtil::exec($cmd, $output, $result);
 
         if ($result !== 0)
-            throw new OMVException(OMVErrorMsg::E_EXEC_FAILED, $cmd, implode("\n", $output));
+        {
+            throw new OMVException(
+                OMVErrorMsg::E_EXEC_FAILED,
+                $cmd,
+                implode("\n", $output)
+            );
+        }
 
         // Get column names
         $cols = array("id","title","author");
@@ -208,7 +253,8 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract {
         array_shift($output);
 
         $objects = array();
-        foreach ($output as $line) {
+        foreach ($output as $line)
+        {
             if (intval(trim($line[0])) < 1)
                 continue;
 
@@ -221,11 +267,15 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract {
         );
     }
 
-    public function deleteBook($params, $context) {
+    public function deleteBook($params, $context)
+    {
         global $xmlConfig;
 
         // Validate the RPC caller context.
-        $this->validateMethodContext($context, array( "role" => OMV_ROLE_ADMINISTRATOR ));
+        $this->validateMethodContext(
+            $context,
+            array( "role" => OMV_ROLE_ADMINISTRATOR )
+        );
 
         // Validate the parameters of the RPC service method.
         $this->validateMethodParams($params, '{
@@ -235,18 +285,33 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract {
             }
         }');
 
-        $object = $xmlConfig->get( $this->getXpath() );
-        if(is_null($object))
-            throw new OMVException(OMVErrorMsg::E_CONFIG_GET_OBJECT_FAILED, $xpath);
+        $object = $xmlConfig->get( $this->getXPath() );
+        if (is_null($object))
+        {
+            throw new OMVException(
+                OMVErrorMsg::E_CONFIG_GET_OBJECT_FAILED,
+                $this->getXPath()
+            );
+        }
 
         $cmd = $this->getProgram() . " remove --library-path \"" . $object['library-folder'] . "\" " . $params['id'] . " 2>&1";
         if(0 !== $this->exec($cmd, $output))
-            throw new OMVException(OMVErrorMsg::E_EXEC_FAILED, $cmd, implode("\n", $output));
+        {
+            throw new OMVException(
+                OMVErrorMsg::E_EXEC_FAILED,
+                $cmd,
+                implode("\n", $output)
+            );
+        }
     }
 
-    function doUpdate($params, $context) {
+    function doUpdate($params, $context)
+    {
         // Validate the RPC caller context.
-        $this->validateMethodContext($context, array( "role" => OMV_ROLE_ADMINISTRATOR ));
+        $this->validateMethodContext(
+            $context,
+            array( "role" => OMV_ROLE_ADMINISTRATOR )
+        );
 
         // Create a background process.
         $bgStatusFilename = $this->createBgProcStatus();

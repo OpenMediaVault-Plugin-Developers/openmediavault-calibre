@@ -125,7 +125,7 @@ EOF
 
         /usr/sbin/usermod -d "${libraryfolder}" ${RUN_AS}
 
-        /etc/init.d/${SERVICE} start
+        invoke-rc.d ${SERVICE} start
     fi
 
     # Disable csp if show tab is enable
@@ -155,7 +155,7 @@ esac
 
     if [ "$(omv_config_get "//services/calibre/enable")" != "0" ]; then
         config
-        service calibre start
+        invoke-rc.d calibre start
     fi
 
 exit 0

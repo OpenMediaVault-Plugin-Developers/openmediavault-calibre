@@ -1,3 +1,10 @@
+openmediavault-calibre (1.0.2) stable; urgency=low
+
+  * Fix typos
+  * Update locales
+
+ -- OpenMediaVault Plugin Developers <plugins@omv-extras.org>  Wed, 06 Aug 2014 06:31:24 -0500
+
 openmediavault-calibre (1.0.1) stable; urgency=low
 
   * Add more output when importing books
