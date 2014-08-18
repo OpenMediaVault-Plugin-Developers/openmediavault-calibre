@@ -25,12 +25,13 @@ RUN_AS="calibre"
 RUN_GRP="users"
 SERVICE="calibre"
 XPATH="//services/${SERVICE}"
+XPATH_ENABLE="${XPATH}/enable"
 
 LINK32="http://status.calibre-ebook.com/dist/linux32"
 LINK64="http://status.calibre-ebook.com/dist/linux64"
 FILE32="/tmp/calibre32.tar.bz2"
 FILE64="/tmp/calibre64.tar.bz2"
-INSTALL_DIR="/opt/calibre"
+INSTALL_DIR="/opt/${SERVICE}"
 
 install()
 {
@@ -48,7 +49,7 @@ install()
 
     echo "Installing Calibre..."
     mkdir -p ${INSTALL_DIR}
-    chown calibre:users ${INSTALL_DIR}
+    chown ${RUN_AS}:${RUN_GRP} ${INSTALL_DIR}
 
     if $AMD64; then
         if [ -f "${FILE64}" ]; then
@@ -70,16 +71,16 @@ install()
         rm -f ${FILE32}
     fi
 
-    chown -R calibre:users ${INSTALL_DIR}
+    chown -R ${RUN_AS}:${RUN_GRP} ${INSTALL_DIR}
 
-    insserv calibre
+    insserv ${SERVICE}
 
-    if [ "$(omv_config_get "//services/calibre/enable")" != "1" ]; then
-        update-rc.d calibre disable
+    if [ "$(omv_config_get "${XPATH_ENABLE}")" != "1" ]; then
+        update-rc.d ${SERVICE} disable
     fi
 
-    calibre_home="$(getent passwd calibre | cut -d: -f6)"
-    chown -R calibre:users "${calibre_home}"
+    calibre_home="$(getent passwd ${SERVICE} | cut -d: -f6)"
+    chown -R ${RUN_AS}:${RUN_GRP} "${calibre_home}"
 }
 
 config()
@@ -140,7 +141,7 @@ EOF
 
 case $2 in
     install)
-        if [ "$(omv_config_get "//services/calibre/enable")" != "1" ]; then
+        if [ "$(omv_config_get "${XPATH_ENABLE}")" != "1" ]; then
             install
         fi
     ;;
@@ -153,9 +154,9 @@ case $2 in
     ;;
 esac
 
-    if [ "$(omv_config_get "//services/calibre/enable")" != "0" ]; then
-        config
-        invoke-rc.d calibre start
-    fi
+if [ "$(omv_config_get "${XPATH_ENABLE}")" != "0" ]; then
+    config
+    invoke-rc.d ${SERVICE} start
+fi
 
 exit 0
