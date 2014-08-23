@@ -29,8 +29,8 @@ XPATH_ENABLE="${XPATH}/enable"
 
 LINK32="http://status.calibre-ebook.com/dist/linux32"
 LINK64="http://status.calibre-ebook.com/dist/linux64"
-FILE32="/tmp/calibre32.tar.bz2"
-FILE64="/tmp/calibre64.tar.bz2"
+FILE32="/tmp/calibre32.txz"
+FILE64="/tmp/calibre64.txz"
 INSTALL_DIR="/opt/${SERVICE}"
 
 install()
@@ -58,7 +58,7 @@ install()
         wget ${LINK64} -O ${FILE64}
 
         echo "Extracting..."
-        tar -xjof ${FILE64} -C ${INSTALL_DIR}
+        tar -xJof ${FILE64} -C ${INSTALL_DIR}
         rm -f ${FILE64}
     else
         if [ -f "${FILE32}" ]; then
@@ -67,7 +67,7 @@ install()
         wget ${LINK32} -O ${FILE32}
 
         echo "Extracting..."
-        tar -xjof ${FILE32} -C ${INSTALL_DIR}
+        tar -xJof ${FILE32} -C ${INSTALL_DIR}
         rm -f ${FILE32}
     fi
 
