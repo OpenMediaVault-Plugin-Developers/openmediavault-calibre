@@ -102,36 +102,28 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract
         $this->validateMethodParams($params, '{
             "type"       : "object",
             "properties" : {
-                "enable"          : { "type" : "boolean" },
-                "mntentref"       : { ' . $GLOBALS['OMV_JSONSCHEMA_UUID_NONE'] . ' },
-                "library-folder"  : { "type" : "string", "optional" : true },
-                "port"            : { "type" : "integer", "minimum" : 1 },
-                "username"        : { "type" : "string", "optional" : true },
-                "password"        : { "type" : "string", "optional" : true },
-                "coversize"       : { "type" : "string", "optional" : true },
-                "showtab"         : { "type" : "boolean" },
-                "sharedfolderref" : { '.$GLOBALS['OMV_JSONSCHEMA_UUID_NONE'].', "optional" : true }
+                "enable"                 : { "type" : "boolean" },
+                "data.sharedfolderref"   : {' . $GLOBALS["OMV_JSONSCHEMA_UUID"] . '},
+                "port"                   : { "type" : "integer", "minimum" : 1 },
+                "username"               : { "type" : "string", "optional" : true },
+                "password"               : { "type" : "string", "optional" : true },
+                "coversize"              : { "type" : "string", "optional" : true },
+                "showtab"                : { "type" : "boolean" },
+                "import.sharedfolderref" : { '.$GLOBALS['OMV_JSONSCHEMA_UUID_NONE'].', "optional" : true }
             }
         }');
 
-        $xPath = sprintf("//system/fstab/mntent[uuid='%s']", $params['mntentref']);
-        $deviceDir = $xmlConfig->get($xPath);
-        $deviceDir = $deviceDir['dir'];
-
-        $dataFolder = "{$deviceDir}/calibre-data";
-        $params['library-folder'] = $dataFolder;
-
         // Prepare configuration data
         $object = array(
-            "enable"          => array_boolval($params, 'enable'),
-            "mntentref"       => $params['mntentref'],
-            "library-folder"  => $params['library-folder'],
-            "port"            => intval($params['port']),
-            "username"        => $params['username'],
-            "password"        => $params['password'],
-            "coversize"       => $params['coversize'],
-            "showtab"         => array_boolval($params, 'showtab'),
-            "sharedfolderref" => $params['sharedfolderref']
+            "enable"                 => array_boolval($params, 'enable'),
+            "data.sharedfolderref"   => $params['data.sharedfolderref'],
+            "library-folder"         => $params['library-folder'],
+            "port"                   => intval($params['port']),
+            "username"               => $params['username'],
+            "password"               => $params['password'],
+            "coversize"              => $params['coversize'],
+            "showtab"                => array_boolval($params, 'showtab'),
+            "import.sharedfolderref" => $params['import.sharedfolderref']
         );
 
         // Set configuration object
@@ -168,9 +160,9 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract
             }
         }');
 
-        $sfref = $params['sharedfolderref'];
+        $importRef = $params['import.sharedfolderref'];
 
-        if( strlen($sfref) < 30 )
+        if( strlen($importRef) < 30 )
         {
             throw new OMVException(
                 OMVErrorMsg::E_MISC_FAILURE,
@@ -190,12 +182,15 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract
         // Create a background process.
         $bgStatusFilename = $this->createBgProcStatus();
         $pid = $this->fork();
-        if($pid > 0) { // Parent process.
+        if ($pid > 0) { // Parent process.
             $this->initializeBgProcStatus($bgStatusFilename, $pid);
             return $bgStatusFilename;
         }
 
-        $sfPath = OMVRpc::exec("ShareMgmt", "getPath", array("uuid" => $sfref), $context);
+        $dataRef = $object['data.sharedfolderref'];
+
+        $importPath = OMVRpc::exec("ShareMgmt", "getPath", array("uuid" => $importRef), $context);
+        $dataPath   = OMVRpc::exec("ShareMgmt", "getPath", array("uuid" => $dataRef), $context);
 
         // Child process.
         try {
@@ -205,7 +200,7 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract
             $cmd = "echo 'Starting import...\nThis can take a long time when importing large book collections.\n'";
             $this->exec($cmd, $output, $bgOutputFilename);
 
-            $cmd = $this->getProgram() . " add --recurse --library-path \"" . $object['library-folder'] . "\" $sfPath 2>&1";
+            $cmd = $this->getProgram() . " add --recurse --library-path \"$dataPath\" \"$importPath\" 2>&1";
             $this->exec($cmd, $output, $bgOutputFilename);
 
             $this->finalizeBgProcStatus($bgStatusFilename, $output);
@@ -235,7 +230,10 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract
             );
         }
 
-        $cmd = $this->getProgram() . " list --library-path \"" . $object['library-folder'] . "\" -f title,authors --separator \"\t\" 2>&1";
+        $dataRef  = $object['data.sharedfolderref'];
+        $dataPath = OMVRpc::exec("ShareMgmt", "getPath", array("uuid" => $dataRef), $context);
+
+        $cmd = $this->getProgram() . " list --library-path \"$dataPath\" -f title,authors --separator \"\t\" 2>&1";
         OMVUtil::exec($cmd, $output, $result);
 
         if ($result !== 0)
@@ -294,8 +292,11 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract
             );
         }
 
-        $cmd = $this->getProgram() . " remove --library-path \"" . $object['library-folder'] . "\" " . $params['id'] . " 2>&1";
-        if(0 !== $this->exec($cmd, $output))
+        $dataRef  = $object['data.sharedfolderref'];
+        $dataPath = OMVRpc::exec("ShareMgmt", "getPath", array("uuid" => $dataRef), $context);
+
+        $cmd = $this->getProgram() . " remove --library-path \"$dataPath\" " . $params['id'] . " 2>&1";
+        if (0 !== $this->exec($cmd, $output))
         {
             throw new OMVException(
                 OMVErrorMsg::E_EXEC_FAILED,
@@ -316,7 +317,7 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract
         // Create a background process.
         $bgStatusFilename = $this->createBgProcStatus();
         $pid = $this->fork();
-        if($pid > 0) { // Parent process.
+        if ($pid > 0) { // Parent process.
             $this->initializeBgProcStatus($bgStatusFilename, $pid);
             return $bgStatusFilename;
         }

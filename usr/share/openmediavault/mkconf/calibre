@@ -85,12 +85,14 @@ install()
 
 config()
 {
-    libraryfolder=$(omv_config_get "${XPATH}/library-folder")
+    dataref=$(omv_config_get "${XPATH}/data.sharedfolderref")
     port=$(omv_config_get "${XPATH}/port")
     username=$(omv_config_get "${XPATH}/username")
     password=$(omv_config_get "${XPATH}/password")
     maxcover=$(omv_config_get "${XPATH}/maxcover")
     showtab=$(omv_config_get "${XPATH}/showtab")
+
+    libraryfolder="$(omv_get_sharedfolder_path "${dataref}")"
 
     # Create calibre config file
     cat <<EOF > ${CALIBRE_CONFIG}
@@ -107,7 +109,7 @@ EOF
     chown -R ${RUN_AS}:${RUN_GRP} "${calibre_home}"
 
     if [ "${calibre_home}" != "${libraryfolder}" ]; then
-        /etc/init.d/${SERVICE} stop
+        invoke-rc.d ${SERVICE} stop
 
         if [ ! -d "${libraryfolder}" ]; then
             mkdir -p "${libraryfolder}"

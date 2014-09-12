@@ -5,6 +5,26 @@ set -e
 . /etc/default/openmediavault
 . /usr/share/openmediavault/scripts/helper-functions
 
+data_drive_to_shared_folder()
+{
+    name="CalibreData"
+    comment="Calibre data location"
+    mntentref=$(omv_config_get "//services/calibre/mntentref")
+    reldirpath="calibre-data"
+
+    if [ ! -z "${mntentref}" ]; then
+        # Prepare JSON data.
+        json="{ \"uuid\": \"undefined\", \"name\": \"${name}\", \"comment\": \"${comment}\", \"mntentref\": \"${mntentref}\", \"reldirpath\": \"${reldirpath}\" }"
+
+        # Call omv-rcp and create the shared folder and then filter out the
+        # uuid of the new shared folder.
+        uuid=$(omv-rpc ShareMgmt set "${json}" | grep -Po '(?<="uuid":")[^"]*')
+
+        # Add the shared folder to the plugin config.
+        omv_config_add_element "/config/services/calibre" "data.sharedfolderref" $uuid
+    fi
+}
+
 case "$1" in
 
     configure)
@@ -22,14 +42,13 @@ case "$1" in
             CALIBRE_HOME=$(getent passwd calibre | cut -d: -f6)
 
             object="<enable>0</enable>"
-            object="${object}<mntentref></mntentref>"
-            object="${object}<library-folder>${CALIBRE_HOME}</library-folder>"
+            object="${object}<data.sharedfolderref></data.sharedfolderref>"
             object="${object}<port>8080</port>"
             object="${object}<username></username>"
             object="${object}<password></password>"
             object="${object}<coversize></coversize>"
             object="${object}<showtab>0</showtab>"
-            object="${object}<sharedfolderref></sharedfolderref>"
+            object="${object}<import.sharedfolderref></import.sharedfolderref>"
 
             omv_config_add_element "/config/services" "calibre" "${object}" true
         fi
@@ -37,6 +56,10 @@ case "$1" in
         if [ -e /var/run/calibre ]; then
             echo "Removing old pid file..."
             rm -rf /var/run/calibre
+        fi
+
+        if dpkg --compare-versions "$2" lt-nl "1.0.4"; then
+            data_drive_to_shared_folder
         fi
 
         echo "Create config file..."

@@ -88,45 +88,13 @@ Ext.define("OMV.module.admin.service.calibre.Settings", {
                 fieldLabel : _("Enable"),
                 checked    : false
             },{
-                xtype         : "combo",
-                name          : "mntentref",
-                fieldLabel    : _("Library Volume"),
-                emptyText     : _("Select a volume ..."),
-                allowBlank    : false,
-                allowNone     : false,
-                editable      : false,
-                triggerAction : "all",
-                displayField  : "description",
-                valueField    : "uuid",
-                store         : Ext.create("OMV.data.Store", {
-                    autoLoad : true,
-                    model    : OMV.data.Model.createImplicit({
-                        idProperty : "uuid",
-                        fields     : [
-                            { name : "uuid", type : "string" },
-                            { name : "devicefile", type : "string" },
-                            { name : "description", type : "string" }
-                        ]
-                    }),
-                    proxy : {
-                        type : "rpc",
-                        rpcData : {
-                            service : "ShareMgmt",
-                            method  : "getCandidates"
-                        },
-                        appendSortParams : false
-                    },
-                    sorters : [{
-                        direction : "ASC",
-                        property  : "devicefile"
-                    }]
-                })
-            },{
-                xtype      : "textfield",
-                name       : "library-folder",
-                fieldLabel : _("Library Folder"),
-                allowNone  : true,
-                readOnly   : true
+                xtype      : "sharedfoldercombo",
+                name       : "data.sharedfolderref",
+                fieldLabel : _("Data directory"),
+                plugins    : [{
+                    ptype : "fieldinfo",
+                    text  : _("The location where Calibre stores its data.")
+                }]
             },{
                 xtype         : "numberfield",
                 name          : "port",
@@ -191,7 +159,7 @@ Ext.define("OMV.module.admin.service.calibre.Settings", {
             },
             items : [{
                 xtype      : "sharedfoldercombo",
-                name       : "sharedfolderref",
+                name       : "import.sharedfolderref",
                 fieldLabel : _("Shared folder"),
                 allowNone  : true,
                 allowBlank : true,
