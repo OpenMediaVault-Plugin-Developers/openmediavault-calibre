@@ -1,9 +1,9 @@
-openmediavault-calibre (1.0.4) UNRELEASED; urgency=low
+openmediavault-calibre (1.0.4) stable; urgency=low
 
   * Convert data location to shared folder
   * Update locales
 
- -- OpenMediaVault Plugin Developers <plugins@omv-extras.org>  Fri, 12 Sep 2014 07:08:54 -0500
+ -- OpenMediaVault Plugin Developers <plugins@omv-extras.org>  Tue, 16 Sep 2014 10:41:37 -0500
 
 openmediavault-calibre (1.0.3) stable; urgency=low
 

@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: openmediavault-calibre\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-14 12:42-0500\n"
-"PO-Revision-Date: 2014-07-15 23:25+0000\n"
-"Last-Translator: songming <by@songming.me>\n"
+"POT-Creation-Date: 2014-09-16 10:35-0500\n"
+"PO-Revision-Date: 2014-09-16 15:37+0000\n"
+"Last-Translator: Aaron Murray <aaron27@ryecoinc.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/projects/p/openmediavault-calibre/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -33,6 +33,9 @@ msgstr "Calibre"
 msgid "Cover Size"
 msgstr "封面尺寸"
 
+msgid "Data directory"
+msgstr ""
+
 msgid "Done..."
 msgstr "完成中..."
 
@@ -48,12 +51,6 @@ msgstr "导入"
 msgid "Importing..."
 msgstr "导入中..."
 
-msgid "Library Folder"
-msgstr "库文件夹"
-
-msgid "Library Volume"
-msgstr "库卷"
-
 msgid "Open Web Interface"
 msgstr "打开web页面"
 
@@ -65,9 +62,6 @@ msgstr "端口"
 
 msgid "Port to listen on."
 msgstr "监听端口。"
-
-msgid "Select a volume ..."
-msgstr "选择卷 ..."
 
 msgid "Set a password to restrict access - optional"
 msgstr "设置密码来限制访问 - 可选"
@@ -86,6 +80,9 @@ msgstr "标签页显示 web 后台。"
 
 msgid "The location of books to import."
 msgstr "导入书籍位置。"
+
+msgid "The location where Calibre stores its data."
+msgstr ""
 
 msgid "The maximum size for displayed covers. Default is '600x800' - optional"
 msgstr "封面最大显示尺寸，默认是 '600x800' - 可选"

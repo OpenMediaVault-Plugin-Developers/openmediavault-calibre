@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: openmediavault-calibre\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-14 12:42-0500\n"
-"PO-Revision-Date: 2014-07-14 17:43+0000\n"
+"POT-Creation-Date: 2014-09-16 10:35-0500\n"
+"PO-Revision-Date: 2014-09-16 15:37+0000\n"
 "Last-Translator: Aaron Murray <aaron27@ryecoinc.com>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/openmediavault-calibre/language/ru/)\n"
 "MIME-Version: 1.0\n"
@@ -33,6 +33,9 @@ msgstr ""
 msgid "Cover Size"
 msgstr ""
 
+msgid "Data directory"
+msgstr ""
+
 msgid "Done..."
 msgstr ""
 
@@ -48,12 +51,6 @@ msgstr ""
 msgid "Importing..."
 msgstr ""
 
-msgid "Library Folder"
-msgstr ""
-
-msgid "Library Volume"
-msgstr ""
-
 msgid "Open Web Interface"
 msgstr ""
 
@@ -64,9 +61,6 @@ msgid "Port"
 msgstr "Порт"
 
 msgid "Port to listen on."
-msgstr ""
-
-msgid "Select a volume ..."
 msgstr ""
 
 msgid "Set a password to restrict access - optional"
@@ -85,6 +79,9 @@ msgid "Show tab containing web interface frame."
 msgstr ""
 
 msgid "The location of books to import."
+msgstr ""
+
+msgid "The location where Calibre stores its data."
 msgstr ""
 
 msgid "The maximum size for displayed covers. Default is '600x800' - optional"

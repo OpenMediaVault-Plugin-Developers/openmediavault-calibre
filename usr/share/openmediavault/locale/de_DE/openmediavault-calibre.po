@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: openmediavault-calibre\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-14 12:42-0500\n"
-"PO-Revision-Date: 2014-07-14 17:43+0000\n"
+"POT-Creation-Date: 2014-09-16 10:35-0500\n"
+"PO-Revision-Date: 2014-09-16 15:37+0000\n"
 "Last-Translator: Aaron Murray <aaron27@ryecoinc.com>\n"
 "Language-Team: German (Germany) (http://www.transifex.com/projects/p/openmediavault-calibre/language/de_DE/)\n"
 "MIME-Version: 1.0\n"
@@ -33,6 +33,9 @@ msgstr "Calibre"
 msgid "Cover Size"
 msgstr "Covergröße"
 
+msgid "Data directory"
+msgstr ""
+
 msgid "Done..."
 msgstr ""
 
@@ -48,12 +51,6 @@ msgstr "Import"
 msgid "Importing..."
 msgstr ""
 
-msgid "Library Folder"
-msgstr "Bibliotheksordner"
-
-msgid "Library Volume"
-msgstr "Bibliothekslaufwerk"
-
 msgid "Open Web Interface"
 msgstr ""
 
@@ -65,9 +62,6 @@ msgstr "Port"
 
 msgid "Port to listen on."
 msgstr "Port auf dem gehorcht wird."
-
-msgid "Select a volume ..."
-msgstr "Wählen Sie ein Laufwerk..."
 
 msgid "Set a password to restrict access - optional"
 msgstr "Setzen Sie ein Passwort um den Zugang zu beschränken - optional"
@@ -86,6 +80,9 @@ msgstr "Zeige Tab mit dem Weboberflächen-Frame"
 
 msgid "The location of books to import."
 msgstr "Speicherort zu importierender Bücher"
+
+msgid "The location where Calibre stores its data."
+msgstr ""
 
 msgid "The maximum size for displayed covers. Default is '600x800' - optional"
 msgstr "Maximalgröße der angezeigten Cover. Voreingestellt ist 600x800px - optional"
