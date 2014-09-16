@@ -54,9 +54,11 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract
     {
         $this->registerMethod('getSettings');
         $this->registerMethod('setSettings');
-        $this->registerMethod('doImport');
+
         $this->registerMethod('getBookList');
         $this->registerMethod('deleteBook');
+
+        $this->registerMethod('doImport');
         $this->registerMethod('doUpdate');
     }
 
@@ -72,8 +74,7 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract
 
         // Get configuration object
         $object = $xmlConfig->get( $this->getXPath() );
-        if (is_null($object))
-        {
+        if (is_null($object)) {
             throw new OMVException(
                 OMVErrorMsg::E_CONFIG_GET_OBJECT_FAILED,
                 $this->getXPath()
@@ -127,8 +128,7 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract
         );
 
         // Set configuration object
-        if (false === $xmlConfig->replace($this->getXPath(), $object))
-        {
+        if (false === $xmlConfig->replace($this->getXPath(), $object)) {
             throw new OMVException(
                 OMVErrorMsg::E_CONFIG_SET_OBJECT_FAILED,
                 $this->getXPath()
@@ -142,75 +142,6 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract
         return $object;
     }
 
-    public function doImport($params, $context)
-    {
-        global $xmlConfig;
-
-        // Validate the RPC caller context.
-        $this->validateMethodContext(
-            $context,
-            array( "role" => OMV_ROLE_ADMINISTRATOR )
-        );
-
-        // Validate the parameters of the RPC service method.
-        $this->validateMethodParams($params, '{
-            "type"       : "object",
-            "properties" : {
-                "sharedfolderref" : { "type" : "string" }
-            }
-        }');
-
-        $importRef = $params['import.sharedfolderref'];
-
-        if( strlen($importRef) < 30 )
-        {
-            throw new OMVException(
-                OMVErrorMsg::E_MISC_FAILURE,
-                "Please set shared folder to import books."
-            );
-        }
-
-        $object = $xmlConfig->get( $this->getXPath() );
-        if (is_null($object))
-        {
-            throw new OMVException(
-                OMVErrorMsg::E_CONFIG_GET_OBJECT_FAILED,
-                $this->getXPath()
-            );
-        }
-
-        // Create a background process.
-        $bgStatusFilename = $this->createBgProcStatus();
-        $pid = $this->fork();
-        if ($pid > 0) { // Parent process.
-            $this->initializeBgProcStatus($bgStatusFilename, $pid);
-            return $bgStatusFilename;
-        }
-
-        $dataRef = $object['data.sharedfolderref'];
-
-        $importPath = OMVRpc::exec("ShareMgmt", "getPath", array("uuid" => $importRef), $context);
-        $dataPath   = OMVRpc::exec("ShareMgmt", "getPath", array("uuid" => $dataRef), $context);
-
-        // Child process.
-        try {
-            $bgOutputFilename = $this->createBgProcOutput();
-            $this->updateBgProcStatus($bgStatusFilename, "outputfilename", $bgOutputFilename);
-
-            $cmd = "echo 'Starting import...\nThis can take a long time when importing large book collections.\n'";
-            $this->exec($cmd, $output, $bgOutputFilename);
-
-            $cmd = $this->getProgram() . " add --recurse --library-path \"$dataPath\" \"$importPath\" 2>&1";
-            $this->exec($cmd, $output, $bgOutputFilename);
-
-            $this->finalizeBgProcStatus($bgStatusFilename, $output);
-
-        } catch(Exception $e) {
-            $this->finalizeBgProcStatus($bgStatusFilename, "", $e);
-            exit(1);
-        }
-    }
-
     public function getBookList($params, $context)
     {
         global $xmlConfig;
@@ -222,8 +153,7 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract
         );
 
         $object = $xmlConfig->get( $this->getXPath() );
-        if (is_null($object))
-        {
+        if (is_null($object)) {
             throw new OMVException(
                 OMVErrorMsg::E_CONFIG_GET_OBJECT_FAILED,
                 $this->getXPath()
@@ -236,8 +166,7 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract
         $cmd = $this->getProgram() . " list --library-path \"$dataPath\" -f title,authors --separator \"\t\" 2>&1";
         OMVUtil::exec($cmd, $output, $result);
 
-        if ($result !== 0)
-        {
+        if ($result !== 0) {
             throw new OMVException(
                 OMVErrorMsg::E_EXEC_FAILED,
                 $cmd,
@@ -251,8 +180,7 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract
         array_shift($output);
 
         $objects = array();
-        foreach ($output as $line)
-        {
+        foreach ($output as $line) {
             if (intval(trim($line[0])) < 1)
                 continue;
 
@@ -284,8 +212,7 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract
         }');
 
         $object = $xmlConfig->get( $this->getXPath() );
-        if (is_null($object))
-        {
+        if (is_null($object)) {
             throw new OMVException(
                 OMVErrorMsg::E_CONFIG_GET_OBJECT_FAILED,
                 $this->getXPath()
@@ -296,13 +223,83 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract
         $dataPath = OMVRpc::exec("ShareMgmt", "getPath", array("uuid" => $dataRef), $context);
 
         $cmd = $this->getProgram() . " remove --library-path \"$dataPath\" " . $params['id'] . " 2>&1";
-        if (0 !== $this->exec($cmd, $output))
-        {
+        if (0 !== $this->exec($cmd, $output)) {
             throw new OMVException(
                 OMVErrorMsg::E_EXEC_FAILED,
                 $cmd,
                 implode("\n", $output)
             );
+        }
+    }
+
+    public function doImport($params, $context)
+    {
+        global $xmlConfig;
+
+        // Validate the RPC caller context.
+        $this->validateMethodContext(
+            $context,
+            array( "role" => OMV_ROLE_ADMINISTRATOR )
+        );
+
+        // Validate the parameters of the RPC service method.
+        $this->validateMethodParams($params, '{
+            "type"       : "object",
+            "properties" : {
+                "sharedfolderref" : { "type" : "string" }
+            }
+        }');
+
+        $importRef = $params['sharedfolderref'];
+
+        if( strlen($importRef) < 30 ) {
+            throw new OMVException(
+                OMVErrorMsg::E_MISC_FAILURE,
+                "Please set shared folder to import books."
+            );
+        }
+
+        $object = $xmlConfig->get( $this->getXPath() );
+        if (is_null($object)) {
+            throw new OMVException(
+                OMVErrorMsg::E_CONFIG_GET_OBJECT_FAILED,
+                $this->getXPath()
+            );
+        }
+
+        $dataRef = $object['data.sharedfolderref'];
+
+        if ( $importRef == $dataRef ) {
+            throw new OMVException(
+                OMVErrorMsg::E_MISC_FAILURE,
+                "Import directory cannot be the same as the data directory."
+            );
+        }
+
+        $importPath = OMVRpc::exec("ShareMgmt", "getPath", array("uuid" => $importRef), $context);
+        $dataPath   = OMVRpc::exec("ShareMgmt", "getPath", array("uuid" => $dataRef), $context);
+
+        // Create a background process.
+        $bgStatusFilename = $this->createBgProcStatus();
+        $pid = $this->fork();
+        if ($pid > 0) { // Parent process.
+            $this->initializeBgProcStatus($bgStatusFilename, $pid);
+            return $bgStatusFilename;
+        }
+
+        // Child process.
+        try {
+            $bgOutputFilename = $this->createBgProcOutput();
+            $this->updateBgProcStatus($bgStatusFilename, "outputfilename", $bgOutputFilename);
+
+            $cmd = $this->getProgram() . " add --recurse --library-path \"$dataPath\" \"$importPath\" 2>&1";
+            $this->exec($cmd, $output, $bgOutputFilename);
+
+            $this->finalizeBgProcStatus($bgStatusFilename, $output);
+
+        } catch(Exception $e) {
+            $this->finalizeBgProcStatus($bgStatusFilename, "", $e);
+            exit(1);
         }
     }
 

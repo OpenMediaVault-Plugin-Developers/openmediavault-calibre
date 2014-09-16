@@ -23,8 +23,9 @@ require_once("openmediavault/error.inc");
 require_once("openmediavault/util.inc");
 require_once("openmediavault/initscript.inc");
 
-class OMVModuleCalibre extends OMVModuleServiceAbstract
-    implements OMVINotifyListener, OMVIModuleServiceStatus
+class OMVModuleCalibre extends OMVModuleServiceAbstract implements
+    OMVINotifyListener,
+    OMVIModuleServiceStatus
 {
 
     public function getName()
@@ -47,13 +48,18 @@ class OMVModuleCalibre extends OMVModuleServiceAbstract
         return sprintf( "org.openmediavault.services.%s", $this->getPluginName() );
     }
 
+    private function getSharedFolderEventMessagePath()
+    {
+        return "org.openmediavault.system.shares.sharedfolder";
+    }
+
     public function getStatus()
     {
         global $xmlConfig;
 
         $object = $xmlConfig->get( $this->getXPath() );
-        if (is_null($object))
-        {
+
+        if (is_null($object)) {
             throw new OMVException(
                 OMVErrorMsg::E_CONFIG_GET_OBJECT_FAILED,
                 $this->getXPath()
@@ -71,10 +77,9 @@ class OMVModuleCalibre extends OMVModuleServiceAbstract
 
     public function applyConfig()
     {
-        $cmd = "omv-mkconf " . $this->getPluginName() . " 2>&1";
+        $cmd = sprintf("omv-mkconf %s 2>&1", $this->getPluginName());
 
-        if (0 !== $this->exec($cmd, $output))
-        {
+        if (0 !== $this->exec($cmd, $output)) {
             throw new OMVException(
                 OMVErrorMsg::E_EXEC_FAILED,
                 $cmd,
@@ -88,16 +93,15 @@ class OMVModuleCalibre extends OMVModuleServiceAbstract
         global $xmlConfig;
 
         $object = $xmlConfig->get( $this->getXPath() );
-        if (is_null($object))
-        {
+
+        if (is_null($object)) {
             throw new OMVException(
                 OMVErrorMsg::E_CONFIG_GET_OBJECT_FAILED,
                 $this->getXPath()
             );
         }
 
-        if (boolval($object['enable']) === true)
-        {
+        if (boolval($object['enable']) === true) {
             $initd = new OMVSysVInitScript($this->getPluginName(), true);
             $initd->exec();
         }
@@ -105,22 +109,8 @@ class OMVModuleCalibre extends OMVModuleServiceAbstract
 
     public function stopService()
     {
-        global $xmlConfig;
-
-        $object = $xmlConfig->get( $this->getXPath() );
-        if (is_null($object))
-        {
-            throw new OMVException(
-                OMVErrorMsg::E_CONFIG_GET_OBJECT_FAILED,
-                $this->getXPath()
-            );
-        }
-
-        if (boolval($object['enable']) === false)
-        {
-            $initd = new OMVSysVInitScript($this->getPluginName(), false);
-            $initd->exec();
-        }
+        $initd = new OMVSysVInitScript($this->getPluginName(), false);
+        $initd->exec();
     }
 
     public function bindListeners(OMVNotifyDispatcher $dispatcher)
@@ -128,11 +118,18 @@ class OMVModuleCalibre extends OMVModuleServiceAbstract
         $dispatcher->addListener(
             OMV_NOTIFY_MODIFY,
             $this->getEventMessagePath(),
-            array($this, "setDirty"));
+            array($this, "setDirty")
+        );
+
+        $dispatcher->addListener(
+            OMV_NOTIFY_MODIFY,
+            $this->getSharedFolderEventMessagePath(),
+            array($this, "setDirty")
+        );
+
     }
 }
 
 // Register module
 $moduleMgr = &OMVModuleMgr::getInstance();
 $moduleMgr->registerModule(new OMVModuleCalibre());
-

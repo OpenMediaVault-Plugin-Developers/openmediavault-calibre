@@ -37,6 +37,18 @@ Ext.define("OMV.module.admin.service.calibre.Settings", {
     plugins      : [{
         ptype        : "linkedfields",
         correlations : [{
+            name : [
+                "data.sharedfolderref"
+            ],
+            conditions : [{
+                name  : "enable",
+                value : true
+            }],
+            properties : [
+                "!allowBlank",
+                "!allowNone"
+            ]
+        },{
             name       : [
                 "openweb"
             ],
@@ -199,7 +211,7 @@ Ext.define("OMV.module.admin.service.calibre.Settings", {
             rpcService      : "Calibre",
             rpcMethod       : "doImport",
             rpcParams       : {
-                sharedfolderref : me.getForm().findField("sharedfolderref").getValue()
+                sharedfolderref : me.getForm().findField("import.sharedfolderref").getValue()
             },
             rpcIgnoreErrors : true,
             hideStartButton : true,

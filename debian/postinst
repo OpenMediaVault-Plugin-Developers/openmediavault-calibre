@@ -7,22 +7,29 @@ set -e
 
 data_drive_to_shared_folder()
 {
-    name="CalibreData"
-    comment="Calibre data location"
-    mntentref=$(omv_config_get "//services/calibre/mntentref")
-    reldirpath="calibre-data"
+    local name="CalibreData"
+    local comment="Calibre data location"
+    local mntentref=$(omv_config_get "//services/calibre/mntentref")
+    local reldirpath="calibre-data"
 
-    if [ ! -z "${mntentref}" ]; then
-        # Prepare JSON data.
-        json="{ \"uuid\": \"undefined\", \"name\": \"${name}\", \"comment\": \"${comment}\", \"mntentref\": \"${mntentref}\", \"reldirpath\": \"${reldirpath}\" }"
+    # Delete old config option
+    omv_config_delete "//services/calibre/mntentref"
 
-        # Call omv-rcp and create the shared folder and then filter out the
-        # uuid of the new shared folder.
-        uuid=$(omv-rpc ShareMgmt set "${json}" | grep -Po '(?<="uuid":")[^"]*')
+    if [ -z "${mntentref}" ]; then
+        omv_config_add_element "/config/services/calibre" "data.sharedfolderref"
 
-        # Add the shared folder to the plugin config.
-        omv_config_add_element "/config/services/calibre" "data.sharedfolderref" $uuid
+        return 0
     fi
+
+    # Prepare JSON data.
+    local json="{ \"uuid\": \"undefined\", \"name\": \"${name}\", \"comment\": \"${comment}\", \"mntentref\": \"${mntentref}\", \"reldirpath\": \"${reldirpath}\" }"
+
+    # Call omv-rcp and create the shared folder and then filter out the
+    # uuid of the new shared folder.
+    uuid=$(omv-rpc ShareMgmt set "${json}" | grep -Po '(?<="uuid":")[^"]*')
+
+    # Add the shared folder to the plugin config.
+    omv_config_add_element "/config/services/calibre" "data.sharedfolderref" $uuid
 }
 
 case "$1" in
@@ -62,9 +69,8 @@ case "$1" in
             data_drive_to_shared_folder
         fi
 
-        echo "Create config file..."
-        omv-mkconf calibre install
-
+        # Activate package triggers. These triggers are only set during the
+        # package installation.
         dpkg-trigger update-fixperms
         dpkg-trigger update-locale
         ;;
