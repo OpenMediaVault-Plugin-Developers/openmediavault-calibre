@@ -73,6 +73,8 @@ case "$1" in
         # package installation.
         dpkg-trigger update-fixperms
         dpkg-trigger update-locale
+
+        omv-mkconf calibre install
         ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
