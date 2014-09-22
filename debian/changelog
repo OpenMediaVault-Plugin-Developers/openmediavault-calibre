@@ -1,3 +1,10 @@
+openmediavault-calibre (1.0.7) stable; urgency=low
+
+  * Update locales
+  * Fix uninstall
+
+ -- OpenMediaVault Plugin Developers <plugins@omv-extras.org>  Mon, 22 Sep 2014 14:01:41 -0500
+
 openmediavault-calibre (1.0.6) stable; urgency=low
 
   * Fix bug

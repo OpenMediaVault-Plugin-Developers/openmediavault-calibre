@@ -141,6 +141,8 @@ EOF
     fi
 }
 
+touch ${CALIBRE_CONFIG}
+
 case $2 in
     install)
         if [ "$(omv_config_get "${XPATH_ENABLE}")" != "1" ]; then
