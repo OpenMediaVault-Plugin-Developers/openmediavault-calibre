@@ -103,6 +103,7 @@ Ext.define("OMV.module.admin.service.calibre.Settings", {
                 xtype      : "sharedfoldercombo",
                 name       : "data.sharedfolderref",
                 fieldLabel : _("Data directory"),
+                allowNone  : true,
                 plugins    : [{
                     ptype : "fieldinfo",
                     text  : _("The location where Calibre stores its data.")
