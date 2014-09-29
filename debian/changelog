@@ -1,6 +1,12 @@
+openmediavault-calibre (1.0.9) UNRELEASED; urgency=low
+
+  * Fix allow none in rpc
+
+ -- OpenMediaVault Plugin Developers <plugins@omv-extras.org>  Mon, 29 Sep 2014 06:05:55 -0500
+
 openmediavault-calibre (1.0.8) stable; urgency=low
 
-  * Allow none for shared folder
+  * Allow none for shared folder - Github issue #4
 
  -- OpenMediaVault Plugin Developers <plugins@omv-extras.org>  Mon, 29 Sep 2014 05:59:30 -0500
 

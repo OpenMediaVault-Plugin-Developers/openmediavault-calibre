@@ -104,7 +104,7 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract
             "type"       : "object",
             "properties" : {
                 "enable"                 : { "type" : "boolean" },
-                "data.sharedfolderref"   : {' . $GLOBALS["OMV_JSONSCHEMA_UUID"] . '},
+                "data.sharedfolderref"   : {' . $GLOBALS["OMV_JSONSCHEMA_UUID_NONE"] . '},
                 "port"                   : { "type" : "integer", "minimum" : 1 },
                 "username"               : { "type" : "string", "optional" : true },
                 "password"               : { "type" : "string", "optional" : true },
