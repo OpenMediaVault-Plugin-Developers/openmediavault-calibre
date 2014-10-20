@@ -160,31 +160,36 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract
             );
         }
 
-        $dataRef  = $object['data.sharedfolderref'];
-        $dataPath = OMVRpc::exec("ShareMgmt", "getPath", array("uuid" => $dataRef), $context);
-
-        $cmd = $this->getProgram() . " list --library-path \"$dataPath\" -f title,authors --separator \"\t\" 2>&1";
-        OMVUtil::exec($cmd, $output, $result);
-
-        if ($result !== 0) {
-            throw new OMVException(
-                OMVErrorMsg::E_EXEC_FAILED,
-                $cmd,
-                implode("\n", $output)
-            );
-        }
-
-        // Get column names
-        $cols = array("id","title","author");
-        $split_limit = count($cols);
-        array_shift($output);
-
         $objects = array();
-        foreach ($output as $line) {
-            if (intval(trim($line[0])) < 1)
-                continue;
 
-            $objects[] = array_combine($cols, preg_split('/\t/', trim($line), $split_limit));
+        $dataRef  = $object['data.sharedfolderref'];
+        if (strlen($dataRef) > 3)
+        {
+            $dataPath = OMVRpc::exec("ShareMgmt", "getPath", array("uuid" => $dataRef), $context);
+
+            $cmd = $this->getProgram() . " list --library-path \"$dataPath\" -f title,authors --separator \"\t\" 2>&1";
+            OMVUtil::exec($cmd, $output, $result);
+
+            if ($result !== 0) {
+                throw new OMVException(
+                    OMVErrorMsg::E_EXEC_FAILED,
+                    $cmd,
+                    implode("\n", $output)
+                );
+            }
+
+            // Get column names
+            $cols = array("id","title","author");
+            $split_limit = count($cols);
+            array_shift($output);
+
+
+            foreach ($output as $line) {
+                if (intval(trim($line[0])) < 1)
+                    continue;
+
+                $objects[] = array_combine($cols, preg_split('/\t/', trim($line), $split_limit));
+            }
         }
 
         return array(

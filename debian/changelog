@@ -1,4 +1,11 @@
-openmediavault-calibre (1.0.9) UNRELEASED; urgency=low
+openmediavault-calibre (1.0.10) stable; urgency=low
+
+  * Fix github issue #5
+  * Update locales
+
+ -- OpenMediaVault Plugin Developers <plugins@omv-extras.org>  Mon, 20 Oct 2014 06:06:37 -0500
+
+openmediavault-calibre (1.0.9) stable; urgency=low
 
   * Fix allow none in rpc
 
