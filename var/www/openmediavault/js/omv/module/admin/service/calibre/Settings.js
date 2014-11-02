@@ -49,13 +49,12 @@ Ext.define("OMV.module.admin.service.calibre.Settings", {
                 "!allowNone"
             ]
         },{
-            name       : [
-                "openweb"
+            conditions  : [
+                { name : "enable", value : true }
             ],
-            conditions : [
-                { name  : "enable", value : false }
-            ],
-            properties : "disabled"
+            properties : function(valid, field) {
+                this.setButtonDisabled("openweb", !valid);
+            }
         }]
     }],
 
@@ -84,6 +83,30 @@ Ext.define("OMV.module.admin.service.calibre.Settings", {
         });
 
         me.callParent(arguments);
+    },
+
+    getButtonItems : function() {
+        var me = this;
+        var items = me.callParent(arguments);
+        items.push({
+            id       : me.getId() + "-update",
+            xtype    : "button",
+            text     : _("Update Calibre"),
+            icon     : "images/add.png",
+            iconCls  : Ext.baseCSSPrefix + "btn-icon-16x16",
+            scope    : me,
+            handler  : Ext.Function.bind(me.onUpdateButton, me, [ me ])
+        },{
+            id       : me.getId() + "-openweb",
+            xtype    : "button",
+            text     : _("Open Web Interface"),
+            icon     : "images/calibre.png",
+            iconCls  : Ext.baseCSSPrefix + "btn-icon-16x16",
+            disabled : true,
+            scope    : me,
+            handler  : Ext.Function.bind(me.onOpenWebButton, me, [ me ])
+        });
+        return items;
     },
 
     getFormItems : function() {
@@ -156,13 +179,6 @@ Ext.define("OMV.module.admin.service.calibre.Settings", {
                 fieldLabel : _("Show Tab"),
                 boxLabel   : _("Show tab containing web interface frame."),
                 checked    : false
-            },{
-                xtype    : "button",
-                name     : "openweb",
-                text     : _("Open Web Interface"),
-                disabled : true,
-                handler  : Ext.Function.bind(me.onOpenWebButton, me, [me]),
-                margin   : "0 0 7 0"
             }]
         },{
             xtype         : "fieldset",
@@ -187,20 +203,6 @@ Ext.define("OMV.module.admin.service.calibre.Settings", {
                 scope   : this,
                 handler : Ext.Function.bind(me.onImportButton, me, [ me ]),
                 margin  : "0 0 7 0"
-            }]
-        },{
-            xtype         : "fieldset",
-            title         : _("Update"),
-            fieldDefaults : {
-                labelSeparator : ""
-            },
-            items : [{
-                xtype   : "button",
-                name    : "update",
-                text    : _("Update Calibre"),
-                scope   : this,
-                handler : Ext.Function.bind(me.onUpdateButton, me, [ me ]),
-                margin  : "5 0 7 0"
             }]
         }];
     },

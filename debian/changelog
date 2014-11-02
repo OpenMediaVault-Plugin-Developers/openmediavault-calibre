@@ -1,3 +1,9 @@
+openmediavault-calibre (1.0.11) stable; urgency=low
+
+  * Move buttons to toolbar
+
+ -- OpenMediaVault Plugin Developers <plugins@omv-extras.org>  Sun, 02 Nov 2014 09:35:47 -0600
+
 openmediavault-calibre (1.0.10) stable; urgency=low
 
   * Fix github issue #5
