@@ -3,7 +3,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Alexander Savchenko, 2014
+# benitude <benjamin.wuthrich@gmail.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: openmediavault-calibre\n"
@@ -11,27 +11,27 @@ msgstr ""
 "POT-Creation-Date: 2014-09-16 10:35-0500\n"
 "PO-Revision-Date: 2014-11-14 19:48+0000\n"
 "Last-Translator: Aaron Murray <aaron27@ryecoinc.com>\n"
-"Language-Team: Russian (http://www.transifex.com/projects/p/openmediavault-calibre/language/ru/)\n"
+"Language-Team: French (http://www.transifex.com/projects/p/openmediavault-calibre/language/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ru\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 msgid "Author"
-msgstr ""
+msgstr "Auteur"
 
 msgid "Book Import"
-msgstr ""
+msgstr "Importer un livre"
 
 msgid "Books"
-msgstr ""
+msgstr "Livres"
 
 msgid "Calibre"
-msgstr ""
+msgstr "Calibre"
 
 msgid "Cover Size"
-msgstr ""
+msgstr "Taille de couverture"
 
 msgid "Data directory"
 msgstr ""
@@ -40,13 +40,13 @@ msgid "Done..."
 msgstr ""
 
 msgid "Enable"
-msgstr "Включить"
+msgstr "Activer"
 
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 msgid "Import"
-msgstr ""
+msgstr "Importer"
 
 msgid "Importing..."
 msgstr ""
@@ -55,40 +55,40 @@ msgid "Open Web Interface"
 msgstr ""
 
 msgid "Password"
-msgstr "Пароль"
+msgstr "Mot de passe"
 
 msgid "Port"
-msgstr "Порт"
+msgstr "Port"
 
 msgid "Port to listen on."
-msgstr ""
+msgstr "Port d'écoute"
 
 msgid "Set a password to restrict access - optional"
-msgstr ""
+msgstr "Attribuer un mot de passe pour restriction d'accès - optionnel"
 
 msgid "Settings"
-msgstr "Настройки"
+msgstr "Paramètres"
 
 msgid "Shared folder"
-msgstr ""
+msgstr "Dossier partagé"
 
 msgid "Show Tab"
-msgstr ""
+msgstr "Afficher onglet"
 
 msgid "Show tab containing web interface frame."
-msgstr ""
+msgstr "Afficher l'onglet contenant l'interface web"
 
 msgid "The location of books to import."
-msgstr ""
+msgstr "Dossier contenant les livres à importer."
 
 msgid "The location where Calibre stores its data."
 msgstr ""
 
 msgid "The maximum size for displayed covers. Default is '600x800' - optional"
-msgstr ""
+msgstr "Taille maximale des couvertures. '600x800' par défaut - optionnel"
 
 msgid "Title"
-msgstr ""
+msgstr "Titre"
 
 msgid "Update"
 msgstr ""
@@ -100,10 +100,10 @@ msgid "Update Calibre..."
 msgstr ""
 
 msgid "Username"
-msgstr ""
+msgstr "Nom d'utilisateur"
 
 msgid "Username for access - optional"
-msgstr ""
+msgstr "Nom d'utilisateur pour l'accès - optionel"
 
 msgid "Web Interface"
-msgstr ""
+msgstr "Interface Web"

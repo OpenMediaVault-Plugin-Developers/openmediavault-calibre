@@ -3,107 +3,107 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Cyryl Sochacki <cyrylsochacki@gmail.com>, 2014
+# Hyeonkyu Chu <hyeonkyu@gmail.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: openmediavault-calibre\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-09-16 10:35-0500\n"
-"PO-Revision-Date: 2014-11-14 19:48+0000\n"
-"Last-Translator: Aaron Murray <aaron27@ryecoinc.com>\n"
-"Language-Team: Polish (Poland) (http://www.transifex.com/projects/p/openmediavault-calibre/language/pl_PL/)\n"
+"PO-Revision-Date: 2014-11-17 01:32+0000\n"
+"Last-Translator: Hyeonkyu Chu <hyeonkyu@gmail.com>\n"
+"Language-Team: Korean (Korea) (http://www.transifex.com/projects/p/openmediavault-calibre/language/ko_KR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: pl_PL\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Language: ko_KR\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 msgid "Author"
-msgstr "Autor"
+msgstr "작가"
 
 msgid "Book Import"
-msgstr "Import książki"
+msgstr "책 가져오기"
 
 msgid "Books"
-msgstr "Książki"
+msgstr "책"
 
 msgid "Calibre"
 msgstr "Calibre"
 
 msgid "Cover Size"
-msgstr "Rozmiar okładki"
+msgstr "표지 크기"
 
 msgid "Data directory"
-msgstr ""
+msgstr "데이터 디렉터리"
 
 msgid "Done..."
-msgstr "Udane..."
+msgstr "완료..."
 
 msgid "Enable"
-msgstr "Włącz"
+msgstr "활성화"
 
 msgid "ID"
 msgstr "ID"
 
 msgid "Import"
-msgstr "Import"
+msgstr "가져오기"
 
 msgid "Importing..."
-msgstr "Importowanie..."
+msgstr "가져오는 중..."
 
 msgid "Open Web Interface"
-msgstr "Otwórz interfejs sieciowy"
+msgstr "웹 인터페이스 열기"
 
 msgid "Password"
-msgstr "Hasło"
+msgstr "암호"
 
 msgid "Port"
-msgstr "Port"
+msgstr "포트"
 
 msgid "Port to listen on."
-msgstr "Port do nasłuchu."
+msgstr "수신 대기 포트."
 
 msgid "Set a password to restrict access - optional"
-msgstr "Ustaw hasło, aby ograniczyć dostęp - opcjonalnie"
+msgstr "접속 제한을 위한 암호 설정 - 선택 사항"
 
 msgid "Settings"
-msgstr "Ustawienia"
+msgstr "설정"
 
 msgid "Shared folder"
-msgstr "Katalog"
+msgstr "공유 폴더"
 
 msgid "Show Tab"
-msgstr "Pokaż zakładkę"
+msgstr "탭 보이기"
 
 msgid "Show tab containing web interface frame."
-msgstr "Pokaż panel Calibre w zakładce"
+msgstr "웹 인터페이스 틀을 포함한 탭 보이기."
 
 msgid "The location of books to import."
-msgstr "Lokalizacja książek do zaimportowania."
+msgstr "책을 가져올 위치."
 
 msgid "The location where Calibre stores its data."
-msgstr ""
+msgstr "Calibre가 자신의 데이터를 저장할 위치."
 
 msgid "The maximum size for displayed covers. Default is '600x800' - optional"
-msgstr "Maksymalny rozmiar wyświetlanej okładki. Domyślną wartością jest \"600 x 800\" - opcjonalnie"
+msgstr "보여줄 표지의의 최대 크기. 기본 값은 '600x800'입니다 - 선택 사항"
 
 msgid "Title"
-msgstr "Tytuł"
+msgstr "제목"
 
 msgid "Update"
-msgstr "Uaktualnij"
+msgstr "갱신"
 
 msgid "Update Calibre"
-msgstr "Uaktualnij Calibre"
+msgstr "Calibre 갱신"
 
 msgid "Update Calibre..."
-msgstr "Aktualizacja Calibre..."
+msgstr "Calibre 갱신..."
 
 msgid "Username"
-msgstr "Nazwa użytkownika"
+msgstr "사용자 이름"
 
 msgid "Username for access - optional"
-msgstr "Nazwa użytkownika - opcjonalnie"
+msgstr "접속을 위한 사용자 이름"
 
 msgid "Web Interface"
-msgstr "Panel web"
+msgstr "웹 인터페이스"
