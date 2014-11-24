@@ -1,3 +1,10 @@
+openmediavault-calibre (1.0.12) UNRELEASED; urgency=low
+
+  * Remove user deletion on plugin uninstallation
+  * Update locales
+
+ -- OpenMediaVault Plugin Developers <plugins@omv-extras.org>  Mon, 24 Nov 2014 06:32:13 -0600
+
 openmediavault-calibre (1.0.11) stable; urgency=low
 
   * Move buttons to toolbar
