@@ -1,3 +1,9 @@
+openmediavault-calibre (1.0.14) stable; urgency=low
+
+  * Fix openweb button
+
+ -- OpenMediaVault Plugin Developers <plugins@omv-extras.org>  Fri, 20 Mar 2015 06:44:54 -0500
+
 openmediavault-calibre (1.0.13) stable; urgency=low
 
   * Add custom debian/control field XB-Plugin-Section
