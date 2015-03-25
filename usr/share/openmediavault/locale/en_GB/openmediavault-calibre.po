@@ -3,13 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Andi Chandler <andi@gowling.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: openmediavault-calibre\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-09-16 10:35-0500\n"
-"PO-Revision-Date: 2014-01-15 17:03+0000\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2015-03-24 01:28+0000\n"
+"Last-Translator: Andi Chandler <andi@gowling.com>\n"
 "Language-Team: English (United Kingdom) (http://www.transifex.com/projects/p/openmediavault-calibre/language/en_GB/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,91 +19,91 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "Author"
-msgstr ""
+msgstr "Author"
 
 msgid "Book Import"
-msgstr ""
+msgstr "Book Import"
 
 msgid "Books"
-msgstr ""
+msgstr "Books"
 
 msgid "Calibre"
-msgstr ""
+msgstr "Calibre"
 
 msgid "Cover Size"
-msgstr ""
+msgstr "Cover Size"
 
 msgid "Data directory"
-msgstr ""
+msgstr "Data directory"
 
 msgid "Done..."
-msgstr ""
+msgstr "Done..."
 
 msgid "Enable"
-msgstr ""
+msgstr "Enable"
 
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 msgid "Import"
-msgstr ""
+msgstr "Import"
 
 msgid "Importing..."
-msgstr ""
+msgstr "Importing..."
 
 msgid "Open Web Interface"
-msgstr ""
+msgstr "Open Web Interface"
 
 msgid "Password"
-msgstr ""
+msgstr "Password"
 
 msgid "Port"
-msgstr ""
+msgstr "Port"
 
 msgid "Port to listen on."
-msgstr ""
+msgstr "Port to listen on."
 
 msgid "Set a password to restrict access - optional"
-msgstr ""
+msgstr "Set a password to restrict access - optional"
 
 msgid "Settings"
-msgstr ""
+msgstr "Settings"
 
 msgid "Shared folder"
-msgstr ""
+msgstr "Shared folder"
 
 msgid "Show Tab"
-msgstr ""
+msgstr "Show Tab"
 
 msgid "Show tab containing web interface frame."
-msgstr ""
+msgstr "Show tab containing web interface frame."
 
 msgid "The location of books to import."
-msgstr ""
+msgstr "The location of books to import."
 
 msgid "The location where Calibre stores its data."
-msgstr ""
+msgstr "The location where Calibre stores its data."
 
 msgid "The maximum size for displayed covers. Default is '600x800' - optional"
-msgstr ""
+msgstr "The maximum size for displayed covers. Default is '600x800' - optional"
 
 msgid "Title"
-msgstr ""
+msgstr "Title"
 
 msgid "Update"
-msgstr ""
+msgstr "Update"
 
 msgid "Update Calibre"
-msgstr ""
+msgstr "Update Calibre"
 
 msgid "Update Calibre..."
-msgstr ""
+msgstr "Update Calibre..."
 
 msgid "Username"
-msgstr ""
+msgstr "Username"
 
 msgid "Username for access - optional"
-msgstr ""
+msgstr "Username for access - optional"
 
 msgid "Web Interface"
-msgstr ""
+msgstr "Web Interface"
