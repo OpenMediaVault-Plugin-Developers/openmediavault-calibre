@@ -1,3 +1,10 @@
+openmediavault-calibre (1.1) stable; urgency=low
+
+  * Fix install
+  * Update locales
+
+ -- OpenMediaVault Plugin Developers <plugins@omv-extras.org>  Wed, 25 Mar 2015 10:11:52 -0500
+
 openmediavault-calibre (1.0.14) stable; urgency=low
 
   * Fix openweb button
