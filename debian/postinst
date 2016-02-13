@@ -8,9 +8,13 @@ set -e
 case "$1" in
 
     configure)
-        if ! getent passwd calibre >/dev/null 2>&1;
+        if ! getent passwd calibre >/dev/null 2>&1; then
             echo "Adding calibre user..."
-            useradd --create-home --groups users --no-user-group --shell /usr/sbin/nologin calibre
+            useradd --create-home \
+                    --groups users \
+                    --no-user-group \
+                    --shell /usr/sbin/nologin \
+                    calibre
         else
             echo "calibre user already exists."
         fi
@@ -32,10 +36,11 @@ case "$1" in
             omv_config_add_element "/config/services" "calibre" "${object}" true
         fi
 
-        if [ -e /var/run/calibre ]; then
-            echo "Removing old pid file..."
-            rm -rf /var/run/calibre
-        fi
+        mkdir -p /var/run/calibre
+        chown calibre:users /var/run/calibre
+
+        echo "Removing old pid file..."
+        rm -f /var/run/calibre/calibre.pid
 
         # Activate package triggers. These triggers are only set during the
         # package installation.

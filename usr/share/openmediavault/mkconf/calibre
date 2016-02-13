@@ -99,7 +99,6 @@ PORT=${port}
 USERNAME=${username}
 PASSWORD=${password}
 MAX_COVER=${maxcover}
-EXTRA_OPTS=""
 EOF
 
     # move data folder

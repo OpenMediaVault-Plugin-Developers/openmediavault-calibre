@@ -4,6 +4,8 @@ After=network.target
 
 [Service]
 Type=forking
+User=calibre
+Group=users
 EnvironmentFile=/etc/calibre-server.conf
 PIDFile=/var/run/calibre/calibre.pid
 ExecStart=/opt/calibre/calibre-server \
@@ -13,7 +15,7 @@ ExecStart=/opt/calibre/calibre-server \
     --password=${PASSWORD} \
     --port=${PORT} \
     --pidfile=/var/run/calibre/calibre.pid \
-    --with-library=${LIBRARY} ${EXTRA_OPTS}
+    --with-library=${LIBRARY}
 
 [Install]
 WantedBy=multi-user.target
