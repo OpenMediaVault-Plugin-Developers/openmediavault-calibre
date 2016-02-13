@@ -1,7 +1,12 @@
+openmediavault-calibre (3.0) stable; urgency=low
+
+  * Update for OMV 3.0
+
+ -- OpenMediaVault Plugin Developers <plugins@omv-extras.org>  Sat, 13 Feb 2016 12:13:55 -0600
+
 openmediavault-calibre (1.1) stable; urgency=low
 
   * Fix install
-  * Update locales
   * Update locales
 
  -- OpenMediaVault Plugin Developers <plugins@omv-extras.org>  Wed, 25 Mar 2015 10:11:52 -0500

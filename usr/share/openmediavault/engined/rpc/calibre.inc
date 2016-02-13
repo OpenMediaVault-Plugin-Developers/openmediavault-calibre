@@ -2,7 +2,7 @@
 /**
  * @author    Volker Theile <volker.theile@openmediavault.org>
  * @copyright Copyright (C) 2009-2014 Volker Theile
- * @copyright Copyright (C) 2014 OpenMediaVault Plugin Developers
+ * @copyright Copyright (C) 2014-2016 OpenMediaVault Plugin Developers
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,11 +17,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-require_once ("openmediavault/object.inc");
+
 require_once ("openmediavault/error.inc");
-require_once ("openmediavault/util.inc");
-require_once ("openmediavault/rpc.inc");
 require_once ("openmediavault/notify.inc");
+require_once ("openmediavault/object.inc");
+require_once ("openmediavault/rpc.inc");
+require_once ("openmediavault/util.inc");
 
 class OMVRpcServiceCalibre extends OMVRpcServiceAbstract
 {
@@ -37,7 +38,7 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract
 
     private function getXPath()
     {
-        return sprintf( "//services/%s", $this->getPluginName() );
+        return sprintf( "/config/services/%s", $this->getPluginName() );
     }
 
     private function getEventMessagePath()
@@ -69,7 +70,7 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract
         // Validate the RPC caller context.
         $this->validateMethodContext(
             $context,
-            array( "role" => OMV_ROLE_ADMINISTRATOR )
+            [ "role" => OMV_ROLE_ADMINISTRATOR ]
         );
 
         // Get configuration object
@@ -96,7 +97,7 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract
         // Validate the RPC caller context.
         $this->validateMethodContext(
             $context,
-            array( "role" => OMV_ROLE_ADMINISTRATOR )
+            [ "role" => OMV_ROLE_ADMINISTRATOR ]
         );
 
         // Validate the parameters of the RPC service method.
@@ -115,7 +116,7 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract
         }');
 
         // Prepare configuration data
-        $object = array(
+        $object = [
             "enable"                 => array_boolval($params, 'enable'),
             "data.sharedfolderref"   => $params['data.sharedfolderref'],
             "library-folder"         => $params['library-folder'],
@@ -125,7 +126,7 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract
             "coversize"              => $params['coversize'],
             "showtab"                => array_boolval($params, 'showtab'),
             "import.sharedfolderref" => $params['import.sharedfolderref']
-        );
+        ];
 
         // Set configuration object
         if (false === $xmlConfig->replace($this->getXPath(), $object)) {
@@ -149,7 +150,7 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract
         // Validate the RPC caller context.
         $this->validateMethodContext(
             $context,
-            array( "role" => OMV_ROLE_ADMINISTRATOR )
+            [ "role" => OMV_ROLE_ADMINISTRATOR ]
         );
 
         $object = $xmlConfig->get( $this->getXPath() );
@@ -160,12 +161,11 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract
             );
         }
 
-        $objects = array();
+        $objects = [];
 
         $dataRef  = $object['data.sharedfolderref'];
-        if (strlen($dataRef) > 3)
-        {
-            $dataPath = OMVRpc::exec("ShareMgmt", "getPath", array("uuid" => $dataRef), $context);
+        if (strlen($dataRef) > 3) {
+            $dataPath = OMVRpc::exec("ShareMgmt", "getPath", [ "uuid" => $dataRef ], $context);
 
             $cmd = $this->getProgram() . " list --library-path \"$dataPath\" -f title,authors --separator \"\t\" 2>&1";
             OMVUtil::exec($cmd, $output, $result);
@@ -179,10 +179,9 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract
             }
 
             // Get column names
-            $cols = array("id","title","author");
+            $cols = [ "id","title","author" ];
             $split_limit = count($cols);
             array_shift($output);
-
 
             foreach ($output as $line) {
                 if (intval(trim($line[0])) < 1)
@@ -192,10 +191,10 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract
             }
         }
 
-        return array(
+        return [
             "total" => count($objects),
             "data"  => $objects
-        );
+        ];
     }
 
     public function deleteBook($params, $context)
@@ -205,7 +204,7 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract
         // Validate the RPC caller context.
         $this->validateMethodContext(
             $context,
-            array( "role" => OMV_ROLE_ADMINISTRATOR )
+            [ "role" => OMV_ROLE_ADMINISTRATOR ]
         );
 
         // Validate the parameters of the RPC service method.
@@ -223,11 +222,12 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract
                 $this->getXPath()
             );
         }
-
         $dataRef  = $object['data.sharedfolderref'];
-        $dataPath = OMVRpc::exec("ShareMgmt", "getPath", array("uuid" => $dataRef), $context);
+        $dataPath = OMVRpc::exec("ShareMgmt", "getPath", [ "uuid" => $dataRef ], $context);
 
-        $cmd = $this->getProgram() . " remove --library-path \"$dataPath\" " . $params['id'] . " 2>&1";
+        $cmd = sprintf("%s remove --library-path \"%s\" %s 2>&1",
+            $this->getProgram(), $dataPath, $params['id']
+        );
         if (0 !== $this->exec($cmd, $output)) {
             throw new OMVException(
                 OMVErrorMsg::E_EXEC_FAILED,
@@ -244,7 +244,7 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract
         // Validate the RPC caller context.
         $this->validateMethodContext(
             $context,
-            array( "role" => OMV_ROLE_ADMINISTRATOR )
+            [ "role" => OMV_ROLE_ADMINISTRATOR ]
         );
 
         // Validate the parameters of the RPC service method.
@@ -281,8 +281,8 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract
             );
         }
 
-        $importPath = OMVRpc::exec("ShareMgmt", "getPath", array("uuid" => $importRef), $context);
-        $dataPath   = OMVRpc::exec("ShareMgmt", "getPath", array("uuid" => $dataRef), $context);
+        $importPath = OMVRpc::exec("ShareMgmt", "getPath", [ "uuid" => $importRef ], $context);
+        $dataPath   = OMVRpc::exec("ShareMgmt", "getPath", [ "uuid" => $dataRef ], $context);
 
         // Create a background process.
         $bgStatusFilename = $this->createBgProcStatus();
@@ -297,9 +297,10 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract
             $bgOutputFilename = $this->createBgProcOutput();
             $this->updateBgProcStatus($bgStatusFilename, "outputfilename", $bgOutputFilename);
 
-            $cmd = $this->getProgram() . " add --recurse --library-path \"$dataPath\" \"$importPath\" 2>&1";
+            $cmd = sprintf("%s add --recurse --library-path \"%s\" \"%s\" 2>&1",
+                $this->getProgram(), $dataPath, $importPath
+            );
             $this->exec($cmd, $output, $bgOutputFilename);
-
             $this->finalizeBgProcStatus($bgStatusFilename, $output);
 
         } catch(Exception $e) {
@@ -313,7 +314,7 @@ class OMVRpcServiceCalibre extends OMVRpcServiceAbstract
         // Validate the RPC caller context.
         $this->validateMethodContext(
             $context,
-            array( "role" => OMV_ROLE_ADMINISTRATOR )
+            [ "role" => OMV_ROLE_ADMINISTRATOR ]
         );
 
         // Create a background process.

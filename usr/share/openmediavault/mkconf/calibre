@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Copyright (C) 2014 OpenMediaVault Plugin Developers
+# Copyright (C) 2014-2016 OpenMediaVault Plugin Developers
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@ CALIBRE_CONFIG="/etc/calibre-server.conf";
 RUN_AS="calibre"
 RUN_GRP="users"
 SERVICE="calibre"
-XPATH="//services/${SERVICE}"
+XPATH="/config/services/${SERVICE}"
 XPATH_ENABLE="${XPATH}/enable"
 
 LINK32="http://status.calibre-ebook.com/dist/linux32"
@@ -73,10 +73,8 @@ install()
 
     chown -R ${RUN_AS}:${RUN_GRP} ${INSTALL_DIR}
 
-    insserv ${SERVICE}
-
     if [ "$(omv_config_get "${XPATH_ENABLE}")" != "1" ]; then
-        update-rc.d ${SERVICE} disable
+        deb-systemd-helper disable ${SERVICE}.service >/dev/null || true
     fi
 
     calibre_home="$(getent passwd ${SERVICE} | cut -d: -f6)"
@@ -109,7 +107,7 @@ EOF
     chown -R ${RUN_AS}:${RUN_GRP} "${calibre_home}"
 
     if [ "${calibre_home}" != "${libraryfolder}" ]; then
-        invoke-rc.d ${SERVICE} stop
+        deb-systemd-invoke stop ${SERVICE}.service >/dev/null || true
 
         if [ ! -d "${libraryfolder}" ]; then
             mkdir -p "${libraryfolder}"
@@ -128,7 +126,7 @@ EOF
 
         /usr/sbin/usermod -d "${libraryfolder}" ${RUN_AS}
 
-        invoke-rc.d ${SERVICE} start
+        deb-systemd-invoke start ${SERVICE}.service >/dev/null || true
     fi
 
     # Disable csp if show tab is enable
@@ -137,7 +135,7 @@ EOF
         omv_set_default OMV_NGINX_SITE_WEBGUI_SECURITY_XFRAMEOPTIONS_ENABLE false
 
         omv-mkconf nginx
-        invoke-rc.d nginx restart
+        deb-systemd-invoke restart nginx.service >/dev/null || true
     fi
 }
 
@@ -160,7 +158,7 @@ esac
 
 if [ "$(omv_config_get "${XPATH_ENABLE}")" != "0" ]; then
     config
-    invoke-rc.d ${SERVICE} start
+    deb-systemd-invoke start ${SERVICE}.service >/dev/null || true
 fi
 
 exit 0

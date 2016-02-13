@@ -1,0 +1,19 @@
+[Unit]
+Description=Calibre Service
+After=network.target
+
+[Service]
+Type=forking
+EnvironmentFile=/etc/calibre-server.conf
+PIDFile=/var/run/calibre/calibre.pid
+ExecStart=/opt/calibre/calibre-server \
+    --daemonize \
+    --max-cover=${MAX_COVER} \
+    --username=${USERNAME} \
+    --password=${PASSWORD} \
+    --port=${PORT} \
+    --pidfile=/var/run/calibre/calibre.pid \
+    --with-library=${LIBRARY} ${EXTRA_OPTS}
+
+[Install]
+WantedBy=multi-user.target

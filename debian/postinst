@@ -5,38 +5,10 @@ set -e
 . /etc/default/openmediavault
 . /usr/share/openmediavault/scripts/helper-functions
 
-data_drive_to_shared_folder()
-{
-    local name="CalibreData"
-    local comment="Calibre data location"
-    local mntentref=$(omv_config_get "//services/calibre/mntentref")
-    local reldirpath="calibre-data"
-
-    # Delete old config option
-    omv_config_delete "//services/calibre/mntentref"
-
-    if [ -z "${mntentref}" ]; then
-        omv_config_add_element "/config/services/calibre" "data.sharedfolderref"
-
-        return 0
-    fi
-
-    # Prepare JSON data.
-    local json="{ \"uuid\": \"undefined\", \"name\": \"${name}\", \"comment\": \"${comment}\", \"mntentref\": \"${mntentref}\", \"reldirpath\": \"${reldirpath}\" }"
-
-    # Call omv-rcp and create the shared folder and then filter out the
-    # uuid of the new shared folder.
-    uuid=$(omv-rpc ShareMgmt set "${json}" | grep -Po '(?<="uuid":")[^"]*')
-
-    # Add the shared folder to the plugin config.
-    omv_config_add_element "/config/services/calibre" "data.sharedfolderref" $uuid
-}
-
 case "$1" in
 
     configure)
-
-        if ! grep -q "^calibre:" /etc/passwd; then
+        if ! getent passwd calibre >/dev/null 2>&1;
             echo "Adding calibre user..."
             useradd --create-home --groups users --no-user-group --shell /usr/sbin/nologin calibre
         else
@@ -65,10 +37,6 @@ case "$1" in
             rm -rf /var/run/calibre
         fi
 
-        if dpkg --compare-versions "$2" lt-nl "1.0.4"; then
-            data_drive_to_shared_folder
-        fi
-
         # Activate package triggers. These triggers are only set during the
         # package installation.
         dpkg-trigger update-fixperms
@@ -85,7 +53,5 @@ case "$1" in
         exit 1
         ;;
 esac
-
-#DEBHELPER#
 
 exit 0

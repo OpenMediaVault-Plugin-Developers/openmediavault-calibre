@@ -2,7 +2,7 @@
 /**
  * @author    Volker Theile <volker.theile@openmediavault.org>
  * @copyright Copyright (C) 2009-2014 Volker Theile
- * @copyright Copyright (C) 2014 OpenMediaVault Plugin Developers
+ * @copyright Copyright (C) 2014-2016 OpenMediaVault Plugin Developers
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,17 +17,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-require_once("openmediavault/module.inc");
-require_once("openmediavault/config.inc");
-require_once("openmediavault/error.inc");
-require_once("openmediavault/util.inc");
-require_once("openmediavault/initscript.inc");
+require_once 'openmediavault/config.inc';
+require_once 'openmediavault/error.inc';
+require_once 'openmediavault/module.inc';
+require_once 'openmediavault/systemctl.inc';
 
 class OMVModuleCalibre extends OMVModuleServiceAbstract implements
     OMVINotifyListener,
     OMVIModuleServiceStatus
 {
-
     public function getName()
     {
         return "Calibre";
@@ -40,7 +38,7 @@ class OMVModuleCalibre extends OMVModuleServiceAbstract implements
 
     private function getXPath()
     {
-        return sprintf( "//services/%s", $this->getPluginName() );
+        return sprintf( "/config/services/%s", $this->getPluginName() );
     }
 
     private function getEventMessagePath()
@@ -58,32 +56,32 @@ class OMVModuleCalibre extends OMVModuleServiceAbstract implements
         global $xmlConfig;
 
         $object = $xmlConfig->get( $this->getXPath() );
-
         if (is_null($object)) {
             throw new OMVException(
                 OMVErrorMsg::E_CONFIG_GET_OBJECT_FAILED,
                 $this->getXPath()
             );
         }
-
-        $initd = new OMVSysVInitScript( $this->getPluginName() );
-        return array(
-            "name"    => $this->getName(),
-            "title"   => gettext( $this->getName() ),
-            "enabled" => boolval($object['enable']),
-            "running" => ($initd->status() == 0)
-        );
+        $systemCtl = new OMVSystemCtl( $this->getPluginName() );
+        return [
+            'name'    => $this->getName(),
+            'title'   => gettext('Calibre'),
+            'enabled' => boolval($object['enable']),
+            'running' => $systemCtl->isActive(),
+        ];
     }
 
     public function applyConfig()
     {
-        $cmd = sprintf("omv-mkconf %s 2>&1", $this->getPluginName());
+        $cmd = sprintf("export LANG=C; omv-mkconf %s 2>&1",
+            $this->getPluginName()
+        );
 
         if (0 !== $this->exec($cmd, $output)) {
             throw new OMVException(
                 OMVErrorMsg::E_EXEC_FAILED,
                 $cmd,
-                implode("\n", $output)
+                implode(PHP_EOL, $output)
             );
         }
     }
@@ -93,24 +91,23 @@ class OMVModuleCalibre extends OMVModuleServiceAbstract implements
         global $xmlConfig;
 
         $object = $xmlConfig->get( $this->getXPath() );
-
         if (is_null($object)) {
             throw new OMVException(
                 OMVErrorMsg::E_CONFIG_GET_OBJECT_FAILED,
                 $this->getXPath()
             );
         }
-
-        if (boolval($object['enable']) === true) {
-            $initd = new OMVSysVInitScript($this->getPluginName(), true);
-            $initd->exec();
+        if (!$object['enable']) {
+            return;
         }
+        $systemCtl = new OMVSystemCtl($this->getPluginName());
+        $systemCtl->enable(true);
     }
 
     public function stopService()
     {
-        $initd = new OMVSysVInitScript($this->getPluginName(), false);
-        $initd->exec();
+        $systemCtl = new OMVSystemCtl($this->getPluginName());
+        $systemCtl->disable(true);
     }
 
     public function bindListeners(OMVNotifyDispatcher $dispatcher)
@@ -126,7 +123,6 @@ class OMVModuleCalibre extends OMVModuleServiceAbstract implements
             $this->getSharedFolderEventMessagePath(),
             array($this, "setDirty")
         );
-
     }
 }
 
