@@ -74,7 +74,7 @@ install()
     chown -R ${RUN_AS}:${RUN_GRP} ${INSTALL_DIR}
 
     if [ "$(omv_config_get "${XPATH_ENABLE}")" != "1" ]; then
-        deb-systemd-helper disable ${SERVICE}.service >/dev/null || true
+        systemctl disable ${SERVICE}.service >/dev/null || true
     fi
 
     calibre_home="$(getent passwd ${SERVICE} | cut -d: -f6)"
@@ -106,7 +106,7 @@ EOF
     chown -R ${RUN_AS}:${RUN_GRP} "${calibre_home}"
 
     if [ "${calibre_home}" != "${libraryfolder}" ]; then
-        deb-systemd-invoke stop ${SERVICE}.service >/dev/null || true
+        systemctl stop ${SERVICE}.service >/dev/null || true
 
         if [ ! -d "${libraryfolder}" ]; then
             mkdir -p "${libraryfolder}"
@@ -125,7 +125,7 @@ EOF
 
         /usr/sbin/usermod -d "${libraryfolder}" ${RUN_AS}
 
-        deb-systemd-invoke start ${SERVICE}.service >/dev/null || true
+        systemctl start ${SERVICE}.service >/dev/null || true
     fi
 
     # Disable csp if show tab is enable
@@ -134,7 +134,7 @@ EOF
         omv_set_default OMV_NGINX_SITE_WEBGUI_SECURITY_XFRAMEOPTIONS_ENABLE false
 
         omv-mkconf nginx
-        deb-systemd-invoke restart nginx.service >/dev/null || true
+        systemctl restart nginx.service >/dev/null || true
     fi
 }
 
@@ -157,7 +157,7 @@ esac
 
 if [ "$(omv_config_get "${XPATH_ENABLE}")" != "0" ]; then
     config
-    deb-systemd-invoke start ${SERVICE}.service >/dev/null || true
+    systemctl start ${SERVICE}.service >/dev/null || true
 fi
 
 exit 0
