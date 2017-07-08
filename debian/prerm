@@ -1,0 +1,21 @@
+#!/bin/sh
+
+set -e
+
+case "$1" in
+	purge)
+		# Remove the configuration data.
+		echo "Cleaning up configuration database ..."
+		omv-confdbadm delete "conf.service.calibre"
+	;;
+
+	remove|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
+	;;
+
+	*)
+		echo "prerm called with unknown argument '$1'" >&2
+		exit 1
+	;;
+esac
+
+exit 0

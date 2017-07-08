@@ -38,7 +38,7 @@ Ext.define("OMV.module.admin.service.calibre.Settings", {
         ptype        : "linkedfields",
         correlations : [{
             name : [
-                "data.sharedfolderref"
+                "datasharedfolderref"
             ],
             conditions : [{
                 name  : "enable",
@@ -54,7 +54,7 @@ Ext.define("OMV.module.admin.service.calibre.Settings", {
             ],
             conditions : [{
                 name  : "enable",
-                value : true 
+                value : true
             }],
             properties : function(valid, field) {
                 this.setButtonDisabled("openweb", !valid);
@@ -67,22 +67,15 @@ Ext.define("OMV.module.admin.service.calibre.Settings", {
 
         me.on('load', function () {
             var checked = me.findField('enable').checked;
-            var showtab = me.findField('showtab').checked;
             var parent = me.up('tabpanel');
 
             if (!parent)
                 return;
 
             var booksPanel = parent.down('panel[title=' + _("Books") + ']');
-            var webPanel = parent.down('panel[title=' + _("Web Interface") + ']');
 
-            if (webPanel) {
+            if (booksPanel) {
                 checked ? booksPanel.enable() : booksPanel.disable();
-            }
-
-            if (webPanel) {
-                checked ? webPanel.enable() : webPanel.disable();
-                showtab ? webPanel.tab.show() : webPanel.tab.hide();
             }
         });
 
@@ -128,7 +121,7 @@ Ext.define("OMV.module.admin.service.calibre.Settings", {
                 checked    : false
             },{
                 xtype      : "sharedfoldercombo",
-                name       : "data.sharedfolderref",
+                name       : "datasharedfolderref",
                 fieldLabel : _("Data directory"),
                 allowNone  : true,
                 plugins    : [{
@@ -177,12 +170,6 @@ Ext.define("OMV.module.admin.service.calibre.Settings", {
                     ptype : "fieldinfo",
                     text  : _("The maximum size for displayed covers. Default is '600x800' - optional")
                 }]
-            },{
-                xtype      : "checkbox",
-                name       : "showtab",
-                fieldLabel : _("Show Tab"),
-                boxLabel   : _("Show tab containing web interface frame."),
-                checked    : false
             }]
         },{
             xtype         : "fieldset",
@@ -192,7 +179,7 @@ Ext.define("OMV.module.admin.service.calibre.Settings", {
             },
             items : [{
                 xtype      : "sharedfoldercombo",
-                name       : "import.sharedfolderref",
+                name       : "importsharedfolderref",
                 fieldLabel : _("Shared folder"),
                 allowNone  : true,
                 allowBlank : true,
@@ -218,7 +205,7 @@ Ext.define("OMV.module.admin.service.calibre.Settings", {
             rpcService      : "Calibre",
             rpcMethod       : "doImport",
             rpcParams       : {
-                sharedfolderref : me.getForm().findField("import.sharedfolderref").getValue()
+                sharedfolderref : me.getForm().findField("importsharedfolderref").getValue()
             },
             rpcIgnoreErrors : true,
             hideStartButton : true,

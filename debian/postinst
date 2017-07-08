@@ -19,23 +19,6 @@ case "$1" in
             echo "calibre user already exists."
         fi
 
-        if ! omv_config_exists "/config/services/calibre"; then
-            echo "Initial configuration."
-
-            CALIBRE_HOME=$(getent passwd calibre | cut -d: -f6)
-
-            object="<enable>0</enable>"
-            object="${object}<data.sharedfolderref></data.sharedfolderref>"
-            object="${object}<port>8080</port>"
-            object="${object}<username></username>"
-            object="${object}<password></password>"
-            object="${object}<coversize></coversize>"
-            object="${object}<showtab>0</showtab>"
-            object="${object}<import.sharedfolderref></import.sharedfolderref>"
-
-            omv_config_add_element "/config/services" "calibre" "${object}" true
-        fi
-
         mkdir -p /var/run/calibre
         chown calibre:users /var/run/calibre
 
@@ -46,6 +29,12 @@ case "$1" in
         # package installation.
         dpkg-trigger update-fixperms
         dpkg-trigger update-locale
+
+        echo "Updating configuration database ..."
+        omv-confdbadm create "conf.service.calibre"
+        if [ -n "$2" ]; then
+            omv-confdbadm migrate "conf.service.calibre" "${2}"
+        fi
 
         omv-mkconf calibre install
         ;;

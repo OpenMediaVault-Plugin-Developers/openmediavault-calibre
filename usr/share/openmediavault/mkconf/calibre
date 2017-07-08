@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Copyright (C) 2014-2016 OpenMediaVault Plugin Developers
+# Copyright (C) 2014-2017 OpenMediaVault Plugin Developers
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ INSTALL_DIR="/opt/${SERVICE}"
 install()
 {
     AMD64=false
-    ARCH="`/bin/uname -m`"
+    ARCH="$(arch)"
 
     case "$ARCH" in
         *x86_64*)
@@ -83,11 +83,10 @@ install()
 
 config()
 {
-    dataref=$(omv_config_get "${XPATH}/data.sharedfolderref")
+    dataref=$(omv_config_get "${XPATH}/datasharedfolderref")
     port=$(omv_config_get "${XPATH}/port")
     username=$(omv_config_get "${XPATH}/username")
     password=$(omv_config_get "${XPATH}/password")
-    maxcover=$(omv_config_get "${XPATH}/maxcover")
     showtab=$(omv_config_get "${XPATH}/showtab")
 
     libraryfolder="$(omv_get_sharedfolder_path "${dataref}")"
@@ -98,7 +97,6 @@ LIBRARY=${libraryfolder}
 PORT=${port}
 USERNAME=${username}
 PASSWORD=${password}
-MAX_COVER=${maxcover}
 EOF
 
     # move data folder
@@ -127,20 +125,11 @@ EOF
 
         systemctl start ${SERVICE}.service >/dev/null || true
     fi
-
-    # Disable csp if show tab is enable
-    if [ ${showtab} != 0 ]; then
-        omv_set_default OMV_NGINX_SITE_WEBGUI_SECURITY_CSP_ENABLE 0
-        omv_set_default OMV_NGINX_SITE_WEBGUI_SECURITY_XFRAMEOPTIONS_ENABLE false
-
-        omv-mkconf nginx
-        systemctl restart nginx.service >/dev/null || true
-    fi
 }
 
 touch ${CALIBRE_CONFIG}
 
-case $2 in
+case $1 in
     install)
         if [ "$(omv_config_get "${XPATH_ENABLE}")" != "1" ]; then
             install

@@ -2,7 +2,7 @@
 /**
  * @author    Volker Theile <volker.theile@openmediavault.org>
  * @copyright Copyright (C) 2009-2014 Volker Theile
- * @copyright Copyright (C) 2014-2016 OpenMediaVault Plugin Developers
+ * @copyright Copyright (C) 2014-2017 OpenMediaVault Plugin Developers
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,115 +17,81 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-require_once 'openmediavault/config.inc';
-require_once 'openmediavault/error.inc';
-require_once 'openmediavault/module.inc';
-require_once 'openmediavault/systemctl.inc';
 
-class OMVModuleCalibre extends OMVModuleServiceAbstract implements
-    OMVINotifyListener,
-    OMVIModuleServiceStatus
+class OMVModuleCalibre extends \OMV\Engine\Module\ServiceAbstract
+    implements \OMV\Engine\Notify\IListener, \OMV\Engine\Module\IServiceStatus
+
 {
     public function getName()
     {
-        return "Calibre";
-    }
-
-    private function getPluginName()
-    {
-        return strtolower( $this->getName() );
-    }
-
-    private function getXPath()
-    {
-        return sprintf( "/config/services/%s", $this->getPluginName() );
-    }
-
-    private function getEventMessagePath()
-    {
-        return sprintf( "org.openmediavault.services.%s", $this->getPluginName() );
-    }
-
-    private function getSharedFolderEventMessagePath()
-    {
-        return "org.openmediavault.system.shares.sharedfolder";
+        return 'Calibre';
     }
 
     public function getStatus()
     {
-        global $xmlConfig;
-
-        $object = $xmlConfig->get( $this->getXPath() );
-        if (is_null($object)) {
-            throw new OMVException(
-                OMVErrorMsg::E_CONFIG_GET_OBJECT_FAILED,
-                $this->getXPath()
-            );
-        }
-        $systemCtl = new OMVSystemCtl( $this->getPluginName() );
-        return [
-            'name'    => $this->getName(),
-            'title'   => gettext('Calibre'),
-            'enabled' => boolval($object['enable']),
-            'running' => $systemCtl->isActive(),
-        ];
+        $db = \OMV\Config\Database::getInstance();
+        $object = $db->get('conf.service.calibre');
+        $systemCtl = new \OMV\System\SystemCtl('calibre');
+        return array(
+            'name' => $this->getName(),
+            'title' => gettext('Calibre'),
+            'enabled' => $object->get('enable'),
+            'running' => $systemCtl->isActive()
+        );
     }
 
     public function applyConfig()
     {
-        $cmd = sprintf("export LANG=C; omv-mkconf %s 2>&1",
-            $this->getPluginName()
-        );
-
-        if (0 !== $this->exec($cmd, $output)) {
-            throw new OMVException(
-                OMVErrorMsg::E_EXEC_FAILED,
-                $cmd,
-                implode(PHP_EOL, $output)
-            );
-        }
+        $cmd = new \OMV\System\Process('omv-mkconf', 'calibre');
+        $cmd->setRedirect2to1();
+        $cmd->execute();
     }
 
     public function startService()
     {
-        global $xmlConfig;
-
-        $object = $xmlConfig->get( $this->getXPath() );
-        if (is_null($object)) {
-            throw new OMVException(
-                OMVErrorMsg::E_CONFIG_GET_OBJECT_FAILED,
-                $this->getXPath()
-            );
-        }
-        if (!$object['enable']) {
+        $db = \OMV\Config\Database::getInstance();
+        $object = $db->get('conf.service.calibre');
+        if (TRUE !== $object->get('enable'))
             return;
-        }
-        $systemCtl = new OMVSystemCtl($this->getPluginName());
-        $systemCtl->enable(true);
+        // Start this service and enable the unit file.
+        $systemCtl = new \OMV\System\SystemCtl('calibre');
+        $systemCtl->enable(TRUE);
     }
 
     public function stopService()
     {
-        $systemCtl = new OMVSystemCtl($this->getPluginName());
-        $systemCtl->disable(true);
+        $systemCtl = new \OMV\System\SystemCtl('calibre');
+        $systemCtl->disable(TRUE);
     }
 
-    public function bindListeners(OMVNotifyDispatcher $dispatcher)
+    final public function onSharedFolder($type, $path, $object)
+    {
+        $db = \OMV\Config\Database::getInstance();
+        if (TRUE === $db->exists('conf.service.calibre', [
+            'operator' => 'stringEquals',
+            'arg0' => 'datasharedfolderref',
+            'arg1' => $object['uuid']
+        ])) {
+            $this->setDirty();
+        }
+    }
+
+    public function bindListeners(\OMV\Engine\Notify\Dispatcher $dispatcher)
     {
         $dispatcher->addListener(
             OMV_NOTIFY_MODIFY,
-            $this->getEventMessagePath(),
-            array($this, "setDirty")
+            'org.openmediavault.conf.service.calibre',
+            [ $this, 'setDirty' ]
         );
-
         $dispatcher->addListener(
             OMV_NOTIFY_MODIFY,
-            $this->getSharedFolderEventMessagePath(),
-            array($this, "setDirty")
+            'org.openmediavault.conf.system.sharedfolder',
+            [ $this, 'onSharedFolder' ]
+        );
+        $dispatcher->addListener(
+            OMV_NOTIFY_MODIFY,
+            'org.openmediavault.conf.system.sharedfolder.privilege',
+            [ $this, 'onSharedFolder' ]
         );
     }
 }
-
-// Register module
-$moduleMgr = &OMVModuleMgr::getInstance();
-$moduleMgr->registerModule(new OMVModuleCalibre());
